@@ -1,3 +1,60 @@
+-- Turning global string into pattern to match
+local patternToMatch = ITEM_UPGRADE_TOOLTIP_FORMAT_STRING
+patternToMatch = patternToMatch:gsub("%%s", ")(.*)(")
+patternToMatch = patternToMatch:gsub("%%d", "[0-9]+")
+patternToMatch = "(" .. patternToMatch .. ")"
+
+-- Name keys (should have a way to localize keys)
+local categoryEnum = {
+	Explorer = "Explorer",
+	Adventurer = "Adventurer",
+	Veteran = "Veteran",
+	Champion = "Champion",
+	Hero = "Hero",
+}
+
+-- Name to atlas array 
+local categoryStringToAdd = {
+	[categoryEnum.Explorer] = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a ",
+	[categoryEnum.Adventurer] = "|A:Professions-ChatIcon-Quality-Tier2:20:20|a ",
+	[categoryEnum.Veteran] = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a ",
+	[categoryEnum.Champion] = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a ",
+	[categoryEnum.Hero] = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a ",
+}
+
+-- iLvl range
+local iLvlRange = {
+	Explorer = {min = 376, max = 398, color = ITEM_POOR_COLOR},
+	Adventurer = {min = 389, max = 411, color = WHITE_FONT_COLOR},
+	Veteran = {min = 402, max = 424, color = UNCOMMON_GREEN_COLOR},
+	Champion = {min = 415, max = 437, color = RARE_BLUE_COLOR},
+	Hero = {min = 428, max = 441, color = ITEM_EPIC_COLOR},
+}
+
+local function SearchAndReplaceTooltipLine(tooltip, stringToAdd)
+	for i = 1, tooltip:NumLines() do
+		local line = _G[tooltip:GetName().."TextLeft"..i]
+		local text = line:GetText()
+		
+		if text and text:match(patternToMatch) then
+			local beforeText, categoryText, afterText = text:match(patternToMatch)
+		
+			-- No string = fallback method
+			if not stringToAdd then
+				stringToAdd = categoryStringToAdd[categoryText]
+			end
+		
+			-- Replacing the line
+			if stringToAdd then
+				text = text:gsub(patternToMatch, "%1" .. stringToAdd .. "%2%3")
+			end
+			
+			line:SetText(text)
+			line:Show()
+		end
+	end
+end
+
 TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tooltip, data)
 	local itemName, itemLink = TooltipUtil.GetDisplayedItem(tooltip)
 	if not itemLink then return end
@@ -6,39 +63,30 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 	local numBonusIDs = tonumber(itemLinkValues[14])
 
 	if not numBonusIDs then return end
-	local stringToAdd = "";
+	local stringToAdd;
 	for i = 1, numBonusIDs do
 		local upgradeID = tonumber(itemLinkValues[14 + i])
 		if upgradeID >= 9294 and upgradeID <= 9301 then
-			stringToAdd = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a " -- Stuff to add before Explorer
+			stringToAdd = categoryStringToAdd[categoryEnum.Explorer] -- Stuff to add before Explorer
 		elseif upgradeID >= 9301 and upgradeID <= 9309 then
-			stringToAdd = "|A:Professions-ChatIcon-Quality-Tier2:20:20|a " -- Stuff to add before Adventurer
+			stringToAdd = categoryStringToAdd[categoryEnum.Adventurer] -- Stuff to add before Adventurer
 		elseif upgradeID >= 9313 and upgradeID <= 9320 then
-			stringToAdd = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a " -- Stuff to add before Veteran
+			stringToAdd = categoryStringToAdd[categoryEnum.Veteran] -- Stuff to add before Veteran
 		elseif upgradeID >= 9321 and upgradeID <= 9329 then
-			stringToAdd = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a " -- Stuff to add before Champion
+			stringToAdd = categoryStringToAdd[categoryEnum.Champion] -- Stuff to add before Champion
 		elseif upgradeID >= 9330 and upgradeID <= 9334 then
-			stringToAdd = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a " -- Stuff to add before Hero
+			stringToAdd = categoryStringToAdd[categoryEnum.Hero] -- Stuff to add before Hero
 		end
 	end
 
-	-- Turning global string into pattern to match
-	local patternToMatch = ITEM_UPGRADE_TOOLTIP_FORMAT_STRING
-	patternToMatch = patternToMatch:gsub("%%s", ")(.*)(")
-	patternToMatch = patternToMatch:gsub("%%d", "[0-9]+")
-	patternToMatch = "(" .. patternToMatch .. ")"
-
 	-- Searching the line
-	for i = 1, tooltip:NumLines() do
-		local line = _G[tooltip:GetName().."TextLeft"..i]
-		local text = line:GetText()
-		
-		if text and text:match(patternToMatch) then
-			-- Replacing the line
-			text = text:gsub(patternToMatch, "%1" .. stringToAdd .. "%2%3")
-			
-			line:SetText(text)
-			line:Show()
+	SearchAndReplaceTooltipLine(tooltip, stringToAdd)
+	
+	-- Compare tooltips
+	if tooltip.shoppingTooltips then
+		for _, shoppingTooltip in ipairs(tooltip.shoppingTooltips) do
+			SearchAndReplaceTooltipLine(shoppingTooltip)
 		end
 	end
 end)
+
