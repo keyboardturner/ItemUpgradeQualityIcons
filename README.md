@@ -13,5 +13,4 @@
 <p>Hero - Pentagold</p>
 <p>&nbsp;</p>
 <p>TODO:</p>
-<p>Add dungeon journal / comparison tooltip support</p>
 <p>Shift Modifier to tell item level range, ie on "item level" line: Item Level 437 (428-441)</p>
