@@ -4,14 +4,119 @@ patternToMatch = patternToMatch:gsub("%%s", ")(.*)(")
 patternToMatch = patternToMatch:gsub("%%d", "[0-9]+")
 patternToMatch = "(" .. patternToMatch .. ")"
 
--- Name keys (should have a way to localize keys)
+local LOCALE = GetLocale()
+
 local categoryEnum = {
 	Explorer = "Explorer",
 	Adventurer = "Adventurer",
 	Veteran = "Veteran",
 	Champion = "Champion",
 	Hero = "Hero",
-}
+};
+
+if LOCALE == "enUS" then
+
+-- Name keys (should have a way to localize keys)
+categoryEnum = {
+	Explorer = "Explorer",
+	Adventurer = "Adventurer",
+	Veteran = "Veteran",
+	Champion = "Champion",
+	Hero = "Hero",
+};
+
+elseif LOCALE == "deDE" then
+
+categoryEnum = {
+	Explorer = "Forscher",
+	Adventurer = "Abenteurer",
+	Veteran = "Veteran",
+	Champion = "Champion",
+	Hero = "Held",
+};
+
+elseif LOCALE == "esES" then
+
+categoryEnum = {
+	Explorer = "Expedicionario",
+	Adventurer = "Aventurero",
+	Veteran = "Veterano",
+	Champion = "Campeón",
+	Hero = "Héroe",
+};
+
+elseif LOCALE == "frFR" then
+
+categoryEnum = {
+	Explorer = "Explorateur",
+	Adventurer = "Aventurier",
+	Veteran = "Vétéran",
+	Champion = "Champion",
+	Hero = "Héros",
+};
+
+elseif LOCALE == "itIT" then
+
+categoryEnum = {
+	Explorer = "Esploratore",
+	Adventurer = "Avventuriero",
+	Veteran = "Veterano",
+	Champion = "Campione",
+	Hero = "Eroe",
+};
+
+elseif LOCALE == "ptBR" then
+
+categoryEnum = {
+	Explorer = "Explorador",
+	Adventurer = "Aventureiro",
+	Veteran = "Veterano",
+	Champion = "Campeão",
+	Hero = "Herói",
+};
+
+elseif LOCALE == "ruRU" then
+
+categoryEnum = {
+	Explorer = "Исследователь",
+	Adventurer = "Искатель приключений",
+	Veteran = "Ветеран",
+	Champion = "Защитник",
+	Hero = "Герой",
+};
+
+elseif LOCALE == "koKR" then
+
+categoryEnum = {
+	Explorer = "탐험가",
+	Adventurer = "모험가",
+	Veteran = "노련가",
+	Champion = "챔피언",
+	Hero = "영웅",
+};
+
+elseif LOCALE == "zhCN" then
+
+categoryEnum = {
+	Explorer = "探索者",
+	Adventurer = "冒险者",
+	Veteran = "老兵",
+	Champion = "勇士",
+	Hero = "英雄",
+};
+
+elseif LOCALE == "zhTW" then
+
+categoryEnum = {
+	Explorer = "探索者",
+	Adventurer = "冒险者",
+	Veteran = "老兵",
+	Champion = "勇士",
+	Hero = "英雄",
+};
+
+end
+
 
 -- Name to atlas array 
 local categoryStringToAdd = {
@@ -20,16 +125,7 @@ local categoryStringToAdd = {
 	[categoryEnum.Veteran] = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a ",
 	[categoryEnum.Champion] = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a ",
 	[categoryEnum.Hero] = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a ",
-}
-
--- iLvl range
-local iLvlRange = {
-	Explorer = {min = 376, max = 398, color = ITEM_POOR_COLOR},
-	Adventurer = {min = 389, max = 411, color = WHITE_FONT_COLOR},
-	Veteran = {min = 402, max = 424, color = UNCOMMON_GREEN_COLOR},
-	Champion = {min = 415, max = 437, color = RARE_BLUE_COLOR},
-	Hero = {min = 428, max = 441, color = ITEM_EPIC_COLOR},
-}
+};
 
 local function SearchAndReplaceTooltipLine(tooltip, stringToAdd)
 	for i = 1, tooltip:NumLines() do
@@ -80,7 +176,7 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 	end
 
 	-- Searching the line
-	SearchAndReplaceTooltipLine(tooltip, stringToAdd)
+	SearchAndReplaceTooltipLine(tooltip)
 	
 	-- Compare tooltips
 	if tooltip.shoppingTooltips then
@@ -88,5 +184,4 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 			SearchAndReplaceTooltipLine(shoppingTooltip)
 		end
 	end
-end)
-
+end);
