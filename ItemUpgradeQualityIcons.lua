@@ -4,6 +4,11 @@ patternToMatch = patternToMatch:gsub("%%s", ")(.*)(")
 patternToMatch = patternToMatch:gsub("%%d", "[0-9]+")
 patternToMatch = "(" .. patternToMatch .. ")"
 
+local patternIlvlMatch = ITEM_UPGRADE_ITEM_LEVEL_STAT_FORMAT
+patternIlvlMatch = patternIlvlMatch:gsub("%%s", ")(.*)(")
+patternIlvlMatch = patternIlvlMatch:gsub("%%d", "[0-9]+")
+patternIlvlMatch = "(" .. patternIlvlMatch .. ")"
+
 local LOCALE = GetLocale()
 
 local categoryEnum = {
@@ -118,6 +123,18 @@ categoryEnum = {
 end
 
 
+-- Item level ranges
+
+local itemLevelRanges = {
+	Explorer = {minLevel = 376, maxLevel = 398, color = ITEM_POOR_COLOR},
+	Adventurer = {minLevel = 389, maxLevel = 411, color = WHITE_FONT_COLOR},
+	Veteran = {minLevel = 402, maxLevel = 424, color = UNCOMMON_GREEN_COLOR},
+	Champion = {minLevel = 415, maxLevel = 437, color = RARE_BLUE_COLOR},
+	Hero = {minLevel = 428, maxLevel = 441, color = ITEM_EPIC_COLOR},
+	Mythic = {minLevel = 441, maxLevel = 450, color = ITEM_LEGENDARY_COLOR},
+}
+
+
 -- Name to atlas array 
 local categoryStringToAdd = {
 	[categoryEnum.Explorer] = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a ",
@@ -148,6 +165,23 @@ local function SearchAndReplaceTooltipLine(tooltip, stringToAdd)
 			line:SetText(text)
 			line:Show()
 		end
+
+		if text and text:match(patternIlvlMatch) then
+			local beforeText, categoryText, afterText = text:match(patternIlvlMatch)
+		
+			-- No string = fallback method
+			if not ilvlStringToAdd then
+				ilvlStringToAdd = categoryStringToAdd[categoryText]
+			end
+		
+			-- Replacing the line
+			if ilvlStringToAdd then
+				text = text:gsub(patternIlvlMatch, "%1" .. ilvlStringToAdd)
+			end
+			
+			line:SetText(text)
+			line:Show()
+		end
 	end
 end
 
@@ -162,16 +196,22 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 	local stringToAdd;
 	for i = 1, numBonusIDs do
 		local upgradeID = tonumber(itemLinkValues[14 + i])
+		local colorCode = "|c" ..ITEM_POOR_COLOR:GenerateHexColor()
 		if upgradeID >= 9294 and upgradeID <= 9301 then
 			stringToAdd = categoryStringToAdd[categoryEnum.Explorer] -- Stuff to add before Explorer
+			ilvlStringToAdd = colorCode .. " (" .. itemLevelRanges.Explorer.minLevel .. " - " .. itemLevelRanges.Explorer.maxLevel .. ")|r"
 		elseif upgradeID >= 9301 and upgradeID <= 9309 then
 			stringToAdd = categoryStringToAdd[categoryEnum.Adventurer] -- Stuff to add before Adventurer
+			ilvlStringToAdd = colorCode .. " (" .. itemLevelRanges.Adventurer.minLevel .. " - " .. itemLevelRanges.Adventurer.maxLevel .. ")|r"
 		elseif upgradeID >= 9313 and upgradeID <= 9320 then
 			stringToAdd = categoryStringToAdd[categoryEnum.Veteran] -- Stuff to add before Veteran
+			ilvlStringToAdd = colorCode .. " (" .. itemLevelRanges.Veteran.minLevel .. " - " .. itemLevelRanges.Veteran.maxLevel .. ")|r"
 		elseif upgradeID >= 9321 and upgradeID <= 9329 then
 			stringToAdd = categoryStringToAdd[categoryEnum.Champion] -- Stuff to add before Champion
+			ilvlStringToAdd = colorCode .. " (" .. itemLevelRanges.Champion.minLevel .. " - " .. itemLevelRanges.Champion.maxLevel .. ")|r"
 		elseif upgradeID >= 9330 and upgradeID <= 9334 then
 			stringToAdd = categoryStringToAdd[categoryEnum.Hero] -- Stuff to add before Hero
+			ilvlStringToAdd = colorCode .. " (" .. itemLevelRanges.Hero.minLevel .. " - " .. itemLevelRanges.Hero.maxLevel .. ")|r"
 		end
 	end
 
