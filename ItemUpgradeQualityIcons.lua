@@ -4,10 +4,16 @@ patternUpgradeLevel = patternUpgradeLevel:gsub("%%s", ")(.*)(")
 patternUpgradeLevel = patternUpgradeLevel:gsub("%%d", "[0-9]+")
 patternUpgradeLevel = "(" .. patternUpgradeLevel .. ")"
 
-local patternIlvl = ITEM_UPGRADE_ITEM_LEVEL_STAT_FORMAT
-patternIlvl = "^" .. patternIlvl:gsub("%%d", "[0-9]+") .. "$"
-
 local LOCALE = GetLocale()
+
+local patternIlvl = ITEM_UPGRADE_ITEM_LEVEL_STAT_FORMAT
+
+if LOCALE == "ruRU" then
+	patternIlvl = "^" .. patternIlvl:gsub("%%1%$d", "[0-9]+") .. "$" -- For some godawful reason, russian and russian alone is a different format.
+else
+	patternIlvl = "^" .. patternIlvl:gsub("%%d", "[0-9]+") .. "$" -- Our actual proper pattern matching.
+end
+
 
 local categoryEnum = {
 	Explorer = "Explorer",
