@@ -21,9 +21,10 @@ local categoryEnum = {
 	Veteran = "Veteran",
 	Champion = "Champion",
 	Hero = "Hero",
+	--Myth = "Myth", -- 10.1.5, will change soon
 };
 
-if LOCALE == "enUS" then
+if LOCALE == "enUS" or LOCALE == "enCN" or LOCALE == "enGB" or LOCALE == "enTW" then
 
 	-- Name keys (should have a way to localize keys)
 	categoryEnum = {
@@ -32,6 +33,7 @@ if LOCALE == "enUS" then
 		Veteran = "Veteran",
 		Champion = "Champion",
 		Hero = "Hero",
+		--Myth = "Myth",
 	};
 
 elseif LOCALE == "deDE" then
@@ -44,7 +46,7 @@ elseif LOCALE == "deDE" then
 		Hero = "Held",
 	};
 
-elseif LOCALE == "esES" then
+elseif LOCALE == "esES" or LOCALE == "esMX" then
 
 	categoryEnum = {
 		Explorer = "Expedicionario",
@@ -134,6 +136,7 @@ local categoryDataTab = {
 	[categoryEnum.Veteran] = {minLevel = 402, maxLevel = 424, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a "},
 	[categoryEnum.Champion] = {minLevel = 415, maxLevel = 437, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a "},
 	[categoryEnum.Hero] = {minLevel = 428, maxLevel = 441, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a "},
+	--[categoryEnum.Myth] = {minLevel = 441, maxLevel = 447, color = ITEM_LEGENDARY_COLOR, icon = "|A:BossBanner-SkullCircle:20:20|a "},
 }
 
 local function SearchAndReplaceTooltipLine(tooltip, category)
@@ -207,6 +210,8 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 			category = categoryEnum.Champion
 		elseif upgradeID >= 9330 and upgradeID <= 9334 then
 			category = categoryEnum.Hero
+		--elseif upgradeID >= 9380 and upgradeID <= 9382 then	-- 10.1.5, will change soon
+			--category = categoryEnum.Myth
 		end
 	end
 
