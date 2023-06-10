@@ -13,5 +13,5 @@
 <p>Champion - Quadruple Teal Dot&nbsp;<img src="https://wow.zamimg.com/uploads/screenshots/normal/1067034.png" alt="" width="20" height="21" /></p>
 <p>Hero - Pentagold&nbsp;<img src="https://wow.zamimg.com/uploads/screenshots/normal/1067035.png" alt="" width="20" height="19" /></p>
 <p>&nbsp;</p>
-<p>TODO:</p>
-<p>Shift Modifier to tell item level range, ie on "item level" line: Item Level 437 (428-441)</p>
+<h4>BUG REPORTING</h4>
+<p>If you want to report an issue, <span style="text-decoration: underline;">please state the language you're playing in</span> and/or if any particular <span style="text-decoration: underline;">additional addons causing issues</span>.</p>
