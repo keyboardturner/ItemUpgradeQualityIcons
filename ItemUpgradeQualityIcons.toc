@@ -3,7 +3,7 @@
 ## Notes: Adds the Profession Quality rank to Dragonflight's upgradeable items, such as Explorer, Adventurer, Veteran, Champion, and Hero.
 ## IconAtlas: Professions-ChatIcon-Quality-Tier5
 ## Author: Keyboardturner, Solanya
-## Version: 0.0.7
+## Version: 0.0.8
 
 ## Title-enUS: Item Upgrade Quality
 ## Notes-enUS: Adds the Profession Quality rank to Dragonflight's upgradeable items, such as Explorer, Adventurer, Veteran, Champion, and Hero.

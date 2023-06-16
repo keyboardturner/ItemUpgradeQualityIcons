@@ -200,20 +200,21 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 	local category;
 	for i = 1, numBonusIDs do
 		local upgradeID = tonumber(itemLinkValues[14 + i])
-		if upgradeID then
-			if upgradeID >= 9294 and upgradeID <= 9301 then
-				category = categoryEnum.Explorer
-			elseif upgradeID >= 9301 and upgradeID <= 9309 then
-				category = categoryEnum.Adventurer
-			elseif upgradeID >= 9313 and upgradeID <= 9320 then
-				category = categoryEnum.Veteran
-			elseif upgradeID >= 9321 and upgradeID <= 9329 then
-				category = categoryEnum.Champion
-			elseif upgradeID >= 9330 and upgradeID <= 9334 then
-				category = categoryEnum.Hero
-			--elseif upgradeID >= 9380 and upgradeID <= 9382 then	-- 10.1.5, will change soon
-				--category = categoryEnum.Myth
-			end
+		if upgradeID == nil then
+			return
+		end
+		if upgradeID >= 9294 and upgradeID <= 9301 then
+			category = categoryEnum.Explorer
+		elseif upgradeID >= 9301 and upgradeID <= 9309 then
+			category = categoryEnum.Adventurer
+		elseif upgradeID >= 9313 and upgradeID <= 9320 then
+			category = categoryEnum.Veteran
+		elseif upgradeID >= 9321 and upgradeID <= 9329 then
+			category = categoryEnum.Champion
+		elseif upgradeID >= 9330 and upgradeID <= 9334 then
+			category = categoryEnum.Hero
+		--elseif upgradeID >= 9380 and upgradeID <= 9382 then	-- 10.1.5, will change soon
+			--category = categoryEnum.Myth
 		end
 	end
 
