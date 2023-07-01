@@ -21,7 +21,7 @@ local categoryEnum = {
 	Veteran = "Veteran",
 	Champion = "Champion",
 	Hero = "Hero",
-	--Myth = "Myth", -- 10.1.5, will change soon
+	Myth = "Myth", -- 10.1.5
 };
 
 if LOCALE == "enUS" or LOCALE == "enCN" or LOCALE == "enGB" or LOCALE == "enTW" then
@@ -33,7 +33,7 @@ if LOCALE == "enUS" or LOCALE == "enCN" or LOCALE == "enGB" or LOCALE == "enTW" 
 		Veteran = "Veteran",
 		Champion = "Champion",
 		Hero = "Hero",
-		--Myth = "Myth",
+		Myth = "Myth",
 	};
 
 elseif LOCALE == "deDE" then
@@ -44,6 +44,7 @@ elseif LOCALE == "deDE" then
 		Veteran = "Veteran",
 		Champion = "Champion",
 		Hero = "Held",
+		Myth = "Mythos",
 	};
 
 elseif LOCALE == "esES" or LOCALE == "esMX" then
@@ -54,6 +55,7 @@ elseif LOCALE == "esES" or LOCALE == "esMX" then
 		Veteran = "Veterano",
 		Champion = "Campeón",
 		Hero = "Héroe",
+		Myth = "Mito",
 	};
 
 elseif LOCALE == "frFR" then
@@ -64,6 +66,7 @@ elseif LOCALE == "frFR" then
 		Veteran = "Vétéran",
 		Champion = "Champion",
 		Hero = "Héros",
+		Myth = "Mythe",
 	};
 
 elseif LOCALE == "itIT" then
@@ -74,6 +77,7 @@ elseif LOCALE == "itIT" then
 		Veteran = "Veterano",
 		Champion = "Campione",
 		Hero = "Eroe",
+		Myth = "Mito",
 	};
 
 elseif LOCALE == "ptBR" then
@@ -84,6 +88,7 @@ elseif LOCALE == "ptBR" then
 		Veteran = "Veterano",
 		Champion = "Campeão",
 		Hero = "Herói",
+		Myth = "Mito",
 	};
 
 elseif LOCALE == "ruRU" then
@@ -94,6 +99,7 @@ elseif LOCALE == "ruRU" then
 		Veteran = "Ветеран",
 		Champion = "Защитник",
 		Hero = "Герой",
+		Myth = "Легенда",
 	};
 
 elseif LOCALE == "koKR" then
@@ -104,6 +110,7 @@ elseif LOCALE == "koKR" then
 		Veteran = "노련가",
 		Champion = "챔피언",
 		Hero = "영웅",
+		Myth = "신화",
 	};
 
 elseif LOCALE == "zhCN" then
@@ -114,6 +121,7 @@ elseif LOCALE == "zhCN" then
 		Veteran = "老兵",
 		Champion = "勇士",
 		Hero = "英雄",
+		Myth = "神话",
 	};
 
 elseif LOCALE == "zhTW" then
@@ -124,6 +132,7 @@ elseif LOCALE == "zhTW" then
 		Veteran = "老兵",
 		Champion = "勇士",
 		Hero = "英雄",
+		Myth = "神話",
 	};
 
 end
@@ -136,7 +145,7 @@ local categoryDataTab = {
 	[categoryEnum.Veteran] = {minLevel = 402, maxLevel = 424, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a "},
 	[categoryEnum.Champion] = {minLevel = 415, maxLevel = 437, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a "},
 	[categoryEnum.Hero] = {minLevel = 428, maxLevel = 441, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a "},
-	--[categoryEnum.Myth] = {minLevel = 441, maxLevel = 447, color = ITEM_LEGENDARY_COLOR, icon = "|A:BossBanner-SkullCircle:20:20|a "},
+	[categoryEnum.Myth] = {minLevel = 441, maxLevel = 447, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\Professions-Icon-Quality-Tier6:20:20:0:0:64:64:14:50:14:50|t "}, -- Thanks to Peterodox for supplying this new texture!
 }
 
 local function SearchAndReplaceTooltipLine(tooltip, category)
@@ -213,8 +222,8 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 			category = categoryEnum.Champion
 		elseif upgradeID >= 9330 and upgradeID <= 9334 then
 			category = categoryEnum.Hero
-		--elseif upgradeID >= 9380 and upgradeID <= 9382 then	-- 10.1.5, will change soon
-			--category = categoryEnum.Myth
+		elseif upgradeID >= 9380 and upgradeID <= 9382 then	-- 10.1.5
+			category = categoryEnum.Myth
 		end
 	end
 
