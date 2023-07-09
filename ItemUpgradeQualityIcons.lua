@@ -187,7 +187,7 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 		local line = _G[tooltip:GetName().."TextLeft"..i]
 		local text = line:GetText()
 
-		if text and text:match(patternIlvl) then
+		if text and text:match(patternIlvl) and not text:match(".*" .. categoryData.maxLevel .. "$") then
 			text = text .. "/" .. categoryData.maxLevel
 
 			line:SetText(text)
