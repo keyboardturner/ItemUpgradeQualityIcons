@@ -154,7 +154,10 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 
 	for i = 1, tooltip:NumLines() do
 		local line = _G[tooltip:GetName().."TextLeft"..i]
-		local text = line:GetText()
+		local text
+		if line then
+			text = line:GetText()
+		end
 		
 		if text and text:match(patternUpgradeLevel) then
 			-- No category = fallback method
@@ -185,7 +188,10 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 	-- Editing the ilvl line
 	for i = 1, tooltip:NumLines() do
 		local line = _G[tooltip:GetName().."TextLeft"..i]
-		local text = line:GetText()
+		local text
+		if line then
+			text = line:GetText()
+		end
 
 		if text and text:match(patternIlvl) and not text:match(".*" .. categoryData.maxLevel .. "$") then
 			text = text .. "/" .. categoryData.maxLevel
