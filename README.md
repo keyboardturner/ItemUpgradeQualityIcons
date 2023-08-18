@@ -15,3 +15,6 @@
 <p>&nbsp;</p>
 <h4>BUG REPORTING</h4>
 <p>If you want to report an issue, <span style="text-decoration: underline;">please state the language you're playing in</span> and/or if any particular <span style="text-decoration: underline;">additional addons causing issues</span>.</p>
+
+
+A link to my discord for addon projects and other things can be found [here](https://discord.gg/tA4rrmjPp8).
