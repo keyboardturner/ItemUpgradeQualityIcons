@@ -9,9 +9,9 @@ local LOCALE = GetLocale()
 local patternIlvl = ITEM_UPGRADE_ITEM_LEVEL_STAT_FORMAT
 
 if LOCALE == "ruRU" then
-	patternIlvl = "^" .. patternIlvl:gsub("%%1%$d", "[0-9]+") .. "$" -- For some godawful reason, russian and russian alone is a different format.
+	patternIlvl = "^" .. patternIlvl:gsub("%%1%$d", "([0-9]+)") .. "$" -- For some godawful reason, russian and russian alone is a different format.
 else
-	patternIlvl = "^" .. patternIlvl:gsub("%%d", "[0-9]+") .. "$" -- Our actual proper pattern matching.
+	patternIlvl = "^" .. patternIlvl:gsub("%%d", "([0-9]+)") .. "$" -- Our actual proper pattern matching.
 end
 
 
@@ -193,13 +193,20 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 			text = line:GetText()
 		end
 
-		if text and text:match(patternIlvl) and not text:match(".*" .. categoryData.maxLevel .. "$") then
-			text = text .. "/" .. categoryData.maxLevel
+		if text then
+			-- Checking if ilvl line and retrieving the ilvl value
+			local ilvl = tonumber(text:match(patternIlvl));
+			if ilvl then
+				-- Checking if the ilvl is in the right range (otherwise it's a previous season item)
+				if ilvl >= categoryData.minLevel and ilvl < categoryData.maxLevel then
+					text = text .. "/" .. categoryData.maxLevel
 
-			line:SetText(text)
-			line:Show()
+					line:SetText(text)
+					line:Show()
 
-			break
+					break
+				end
+			end
 		end
 	end
 end
