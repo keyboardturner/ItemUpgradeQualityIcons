@@ -1,4 +1,4 @@
-## Interface: 100107
+## Interface: 100200
 ## Title: Item Upgrade Quality
 ## Notes: Adds the Profession Quality rank to Dragonflight's upgradeable items, such as Explorer, Adventurer, Veteran, Champion, and Hero.
 ## IconAtlas: Professions-ChatIcon-Quality-Tier5
