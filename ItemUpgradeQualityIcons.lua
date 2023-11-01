@@ -140,18 +140,20 @@ end
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {minLevel = 415, maxLevel = 437, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a "},
-	[categoryEnum.Adventurer] = {minLevel = 428, maxLevel = 450, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:20:20|a "},
-	[categoryEnum.Veteran] = {minLevel = 441, maxLevel = 463, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a "},
-	[categoryEnum.Champion] = {minLevel = 454, maxLevel = 476, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a "},
-	[categoryEnum.Hero] = {minLevel = 467, maxLevel = 483, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a "},
-	[categoryEnum.Myth] = {minLevel = 480, maxLevel = 489, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\Professions-Icon-Quality-Tier6:20:20:0:0:64:64:14:50:14:50|t "}, -- Thanks to Peterodox for supplying this new texture!
+	[categoryEnum.Explorer] = {minLevel = 415, maxLevel = 437, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a", iconObsolete = "|TInterface\\AddOns\\totalRP3\\resources\\policegar.tga:20:20|t"},
+	[categoryEnum.Adventurer] = {minLevel = 428, maxLevel = 450, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:20:20|a", iconObsolete = "|TInterface\\AddOns\\totalRP3\\resources\\policegar.tga:20:20|t"},
+	[categoryEnum.Veteran] = {minLevel = 441, maxLevel = 463, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a", iconObsolete = "|TInterface\\AddOns\\totalRP3\\resources\\policegar.tga:20:20|t"},
+	[categoryEnum.Champion] = {minLevel = 454, maxLevel = 476, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a", iconObsolete = "|TInterface\\AddOns\\totalRP3\\resources\\policegar.tga:20:20|t"},
+	[categoryEnum.Hero] = {minLevel = 467, maxLevel = 483, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a", iconObsolete = "|TInterface\\AddOns\\totalRP3\\resources\\policegar.tga:20:20|t"},
+	[categoryEnum.Myth] = {minLevel = 480, maxLevel = 489, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\Professions-Icon-Quality-Tier6:20:20:0:0:64:64:14:50:14:50|t", iconObsolete = "|TInterface\\AddOns\\totalRP3\\resources\\policegar.tga:20:20|t"}, -- Thanks to Peterodox for supplying this new texture!
 }
 
 local function SearchAndReplaceTooltipLine(tooltip, category)
-	-- Editing the upgrade line (need to do first because of fallback detection)
+
 	local categoryData;
 
+	-- Retrieving the upgrade line (need to do first because of fallback detection)
+	local upgradeLevelLine;
 	for i = 1, tooltip:NumLines() do
 		local line = _G[tooltip:GetName().."TextLeft"..i]
 		local text
@@ -170,12 +172,8 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 
 			if not categoryData then return end -- Invalid/non-existent category
 
-			-- Replacing the line
-			text = text:gsub(patternUpgradeLevel, "%1" .. categoryData.icon .. "%2%3")
-			
-			line:SetText(text)
-			line:Show()
-			
+			upgradeLevelLine = line
+
 			break
 		end
 	end
@@ -184,7 +182,9 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 	if not categoryData then
 		return
 	end
-	
+
+	local isCurrentSeason;
+
 	-- Editing the ilvl line
 	for i = 1, tooltip:NumLines() do
 		local line = _G[tooltip:GetName().."TextLeft"..i]
@@ -198,17 +198,40 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 			local ilvl = tonumber(text:match(patternIlvl));
 			if ilvl then
 				-- Checking if the ilvl is in the right range (otherwise it's a previous season item)
-				if ilvl >= categoryData.minLevel and ilvl < categoryData.maxLevel then
-					text = text .. "/" .. categoryData.maxLevel
+				if ilvl >= categoryData.minLevel and ilvl <= categoryData.maxLevel then
 
-					line:SetText(text)
-					line:Show()
+					isCurrentSeason = true;
+
+					-- Not showing ilvl range on a max upgraded item
+					if ilvl ~= categoryData.maxLevel then
+						text = text .. "/" .. categoryData.maxLevel
+
+						line:SetText(text)
+						line:Show()
+					end
 
 					break
 				end
 			end
 		end
 	end
+
+	-- Editing the upgrade line
+	if categoryData and upgradeLevelLine then
+		local text = upgradeLevelLine:GetText()
+
+		if isCurrentSeason then
+			-- Current season
+			text = text:gsub(patternUpgradeLevel, "%1" .. categoryData.icon .. " %2%3")
+		else
+			-- Previous season
+			text = text:gsub(patternUpgradeLevel, "%1" .. categoryData.iconObsolete .. " %2%3")
+		end
+
+		upgradeLevelLine:SetText(text)
+		upgradeLevelLine:Show()
+	end
+
 end
 
 TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tooltip)
