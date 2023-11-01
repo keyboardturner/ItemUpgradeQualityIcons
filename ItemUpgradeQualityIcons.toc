@@ -8,7 +8,7 @@
 ## Title-enUS: Item Upgrade Quality
 ## Notes-enUS: Adds the Profession Quality rank to Dragonflight's upgradeable items, such as Explorer, Adventurer, Veteran, Champion, and Hero.
 ## Title-frFR: Item Upgrade Quality
-## Notes-frFR: Ajoute le rang de qualité de profession aux objets évolutifs de Dragonflight, tels que l'explorateur, l'aventurier, le vétéran, le champion et le héros.
+## Notes-frFR: Ajoute le rang de qualité de profession aux objets améliorables de Dragonflight, tels que Explorateur, Aventurier, Vétéran, Champion et Héros.
 ## Title-esES: Item Upgrade Quality
 ## Notes-esES: Agrega el rango de Calidad de profesión a los elementos mejorables de Dragonflight, como Explorador, Aventurero, Veterano, Campeón y Héroe.
 ## Title-esMX: Item Upgrade Quality
