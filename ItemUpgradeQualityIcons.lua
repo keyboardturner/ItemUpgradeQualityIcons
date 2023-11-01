@@ -140,12 +140,12 @@ end
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {minLevel = 376, maxLevel = 398, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a "},
-	[categoryEnum.Adventurer] = {minLevel = 389, maxLevel = 411, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:20:20|a "},
-	[categoryEnum.Veteran] = {minLevel = 402, maxLevel = 424, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a "},
-	[categoryEnum.Champion] = {minLevel = 415, maxLevel = 437, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a "},
-	[categoryEnum.Hero] = {minLevel = 428, maxLevel = 441, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a "},
-	[categoryEnum.Myth] = {minLevel = 441, maxLevel = 447, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\Professions-Icon-Quality-Tier6:20:20:0:0:64:64:14:50:14:50|t "}, -- Thanks to Peterodox for supplying this new texture!
+	[categoryEnum.Explorer] = {minLevel = 415, maxLevel = 437, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a "},
+	[categoryEnum.Adventurer] = {minLevel = 428, maxLevel = 450, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:20:20|a "},
+	[categoryEnum.Veteran] = {minLevel = 441, maxLevel = 463, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a "},
+	[categoryEnum.Champion] = {minLevel = 454, maxLevel = 476, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a "},
+	[categoryEnum.Hero] = {minLevel = 467, maxLevel = 483, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a "},
+	[categoryEnum.Myth] = {minLevel = 480, maxLevel = 489, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\Professions-Icon-Quality-Tier6:20:20:0:0:64:64:14:50:14:50|t "}, -- Thanks to Peterodox for supplying this new texture!
 }
 
 local function SearchAndReplaceTooltipLine(tooltip, category)
