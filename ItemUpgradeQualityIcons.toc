@@ -1,5 +1,5 @@
 ## Interface: 100200
-## Title: Item Upgrade Quality
+## Title: Item Upgrade Quality Icons
 ## Notes: Adds the Profession Quality rank to Dragonflight's upgradeable items, such as Explorer, Adventurer, Veteran, Champion, and Hero.
 ## IconAtlas: Professions-ChatIcon-Quality-Tier5
 ## Author: Keyboardturner, Solanya
@@ -8,27 +8,27 @@
 ## X-WoWI-ID: 26576
 ## X-Wago-ID: ZKxqqkGk
 
-## Title-enUS: Item Upgrade Quality
+## Title-enUS: Item Upgrade Quality Icons
 ## Notes-enUS: Adds the Profession Quality rank to Dragonflight's upgradeable items, such as Explorer, Adventurer, Veteran, Champion, and Hero.
-## Title-frFR: Item Upgrade Quality
+## Title-frFR: Item Upgrade Quality Icons
 ## Notes-frFR: Ajoute le rang de qualité de profession aux objets améliorables de Dragonflight, tels que Explorateur, Aventurier, Vétéran, Champion et Héros.
-## Title-esES: Item Upgrade Quality
+## Title-esES: Item Upgrade Quality Icons
 ## Notes-esES: Agrega el rango de Calidad de profesión a los elementos mejorables de Dragonflight, como Explorador, Aventurero, Veterano, Campeón y Héroe.
-## Title-esMX: Item Upgrade Quality
+## Title-esMX: Item Upgrade Quality Icons
 ## Notes-esMX: Agrega el rango de Calidad de profesión a los elementos mejorables de Dragonflight, como Explorador, Aventurero, Veterano, Campeón y Héroe.
-## Title-deDE: Item Upgrade Quality
+## Title-deDE: Item Upgrade Quality Icons
 ## Notes-deDE: Fügt den aufrüstbaren Gegenständen von Dragonflight, wie Entdecker, Abenteurer, Veteran, Champion und Held, den Rang „Berufsqualität“ hinzu.
-## Title-itIT: Item Upgrade Quality
+## Title-itIT: Item Upgrade Quality Icons
 ## Notes-itIT: Aggiunge il grado di qualità della professione agli oggetti aggiornabili di Dragonflight, come Esploratore, Avventuriero, Veterano, Campione ed Eroe.
-## Title-ptBR: Item Upgrade Quality
+## Title-ptBR: Item Upgrade Quality Icons
 ## Notes-ptBR: Adiciona o nível de Qualidade de Profissão aos itens atualizáveis do Dragonflight, como Explorador, Aventureiro, Veterano, Campeão e Herói.
-## Title-ruRU: Item Upgrade Quality: Качество улучшения предмета
+## Title-ruRU: Item Upgrade Quality Icons: Качество улучшения предмета
 ## Notes-ruRU: Добавляет уровень качества профессии к улучшаемым предметам Dragonflight, таким как Исследователь, Искатель приключений, Ветеран, Чемпион и Герой.
-## Title-koKR: Item Upgrade Quality: 아이템 업그레이드 품질
+## Title-koKR: Item Upgrade Quality Icons: 아이템 업그레이드 품질 아이콘
 ## Notes-koKR: 탐험가, 모험가, 베테랑, 챔피언, 영웅과 같은 Dragonflight의 업그레이드 가능한 아이템에 직업 품질 등급을 추가합니다.
-## Title-zhCN: Item Upgrade Quality: 物品升級質量
+## Title-zhCN: Item Upgrade Quality Icons: 物品升级质量图标
 ## Notes-zhCN: 將專業品質等級添加到 Dragonflight 的可升級項目，例如探險家、冒險家、老兵、冠軍和英雄。
-## Title-zhTW: Item Upgrade Quality: 物品升級質量
+## Title-zhTW: Item Upgrade Quality Icons: 物品升級品質圖標
 ## Notes-zhTW: 將專業品質等級添加到 Dragonflight 的可升級項目，例如探險家、冒險家、老兵、冠軍和英雄。
 
 ItemUpgradeQualityIcons.lua
