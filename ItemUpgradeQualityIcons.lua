@@ -1,19 +1,19 @@
 -- Turning global string into pattern to match
-local patternUpgradeLevel = ITEM_UPGRADE_TOOLTIP_FORMAT_STRING
+local patternUpgradeLevel = ITEM_UPGRADE_TOOLTIP_FORMAT_STRING -- ITEM_UPGRADE_FRAME_CURRENT_UPGRADE_FORMAT_STRING also works
 patternUpgradeLevel = patternUpgradeLevel:gsub("%%s", ")(.*)(")
 patternUpgradeLevel = patternUpgradeLevel:gsub("%%d", "[0-9]+")
 patternUpgradeLevel = "(" .. patternUpgradeLevel .. ")"
 
 local LOCALE = GetLocale()
 
-local patternIlvl = ITEM_UPGRADE_ITEM_LEVEL_STAT_FORMAT
+local patternIlvl = ITEM_LEVEL
 
-if LOCALE == "ruRU" then
-	patternIlvl = "^" .. patternIlvl:gsub("%%1%$d", "([0-9]+)") .. "$" -- For some godawful reason, russian and russian alone is a different format.
-else
-	patternIlvl = "^" .. patternIlvl:gsub("%%d", "([0-9]+)") .. "$" -- Our actual proper pattern matching.
-end
+-- Apostr-off (because the french are weird)
+patternIlvl = patternIlvl:gsub("'", ".");
+patternIlvl = patternIlvl:gsub("’", ".");
 
+patternIlvl = "^" .. patternIlvl:gsub("%%d", "([0-9]+)") .. "$" -- Our actual proper pattern matching.
+--patternIlvl = "^" .. patternIlvl:gsub("%%1%$d", "([0-9]+)") .. "$" -- This was the old code for Russian
 
 local categoryEnum = {
 	Explorer = "Explorer",
@@ -45,6 +45,8 @@ elseif LOCALE == "deDE" then
 		Champion = "Champion",
 		Hero = "Held",
 		Myth = "Mythos",
+
+		--ITEM_LEVEL / ITEM_UPGRADE_ITEM_LEVEL_STAT_FORMAT = "Stufe aufwerten: %s %d/%d" for current season, but is "Aufwertungsgrad: %s %d/%d" for old season.
 	};
 
 elseif LOCALE == "esES" or LOCALE == "esMX" then
@@ -56,6 +58,8 @@ elseif LOCALE == "esES" or LOCALE == "esMX" then
 		Champion = "Campeón",
 		Hero = "Héroe",
 		Myth = "Mito",
+
+		-- old season esES enums are all lowercase.
 	};
 
 elseif LOCALE == "frFR" then
@@ -67,6 +71,14 @@ elseif LOCALE == "frFR" then
 		Champion = "Champion",
 		Hero = "Héros",
 		Myth = "Mythe",
+
+		-- some weird inconsistencies happening for older seasons, i'll put these for later but not gonna implement them yet
+		--ExplorerMF = "Explorateur", -- need to check old season
+		--AdventurerMF = "Aventurier", -- need to check old season
+		--VeteranMF = "vétéran ou vétérane",
+		--ChampionMF = "champion ou championne",
+		--HeroMF = "héros ou héroïne",
+		--MythMF = "mythique",
 	};
 
 elseif LOCALE == "itIT" then
@@ -100,6 +112,8 @@ elseif LOCALE == "ruRU" then
 		Champion = "Защитник",
 		Hero = "Герой",
 		Myth = "Легенда",
+
+		-- old season ruRU enums are all lowercase.
 	};
 
 elseif LOCALE == "koKR" then
@@ -111,6 +125,8 @@ elseif LOCALE == "koKR" then
 		Champion = "챔피언",
 		Hero = "영웅",
 		Myth = "신화",
+
+		-- old season ITEM_UPGRADE_TOOLTIP_FORMAT_STRING is different from current season
 	};
 
 elseif LOCALE == "zhCN" then
@@ -127,12 +143,14 @@ elseif LOCALE == "zhCN" then
 elseif LOCALE == "zhTW" then
 
 	categoryEnum = {
-		Explorer = "探索者",
-		Adventurer = "冒险者",
-		Veteran = "老兵",
+		Explorer = "探險者",
+		Adventurer = "冒險者",
+		Veteran = "精兵",
 		Champion = "勇士",
 		Hero = "英雄",
 		Myth = "神話",
+
+		-- old season ITEM_UPGRADE_TOOLTIP_FORMAT_STRING is different from current season
 	};
 
 end
