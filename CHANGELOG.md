@@ -1,3 +1,7 @@
+# 0.1.5
+
+10.2.5 toc bump
+
 # 0.1.4
 
 Localization fixes - Fixed Taiwan version having incorrect enum values, fixed French version having incorrect Item Level apostrophe that caused icons to be grey for the current season.
