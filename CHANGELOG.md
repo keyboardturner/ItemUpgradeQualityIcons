@@ -1,3 +1,7 @@
+# 0.1.7
+
+[Season 4](https://worldofwarcraft.blizzard.com/en-us/news/24072151/dragonflight-season-4-dungeon-changes-ahead) ilevel range adjustments
+
 # 0.1.6
 
 toc bump to 10.2.6
