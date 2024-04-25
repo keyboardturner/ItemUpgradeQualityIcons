@@ -34,6 +34,7 @@ if LOCALE == "enUS" or LOCALE == "enCN" or LOCALE == "enGB" or LOCALE == "enTW" 
 		Champion = "Champion",
 		Hero = "Hero",
 		Myth = "Myth",
+		Awakened = "Awakened",
 	};
 
 elseif LOCALE == "deDE" then
@@ -45,6 +46,7 @@ elseif LOCALE == "deDE" then
 		Champion = "Champion",
 		Hero = "Held",
 		Myth = "Mythos",
+		Awakened = "Erweckt",
 
 		--ITEM_LEVEL / ITEM_UPGRADE_ITEM_LEVEL_STAT_FORMAT = "Stufe aufwerten: %s %d/%d" for current season, but is "Aufwertungsgrad: %s %d/%d" for old season.
 	};
@@ -58,6 +60,7 @@ elseif LOCALE == "esES" or LOCALE == "esMX" then
 		Champion = "Campeón",
 		Hero = "Héroe",
 		Myth = "Mito",
+		Awakened = "Despierto",
 
 		-- old season esES enums are all lowercase.
 	};
@@ -71,6 +74,7 @@ elseif LOCALE == "frFR" then
 		Champion = "Champion",
 		Hero = "Héros",
 		Myth = "Mythe",
+		Awakened = "Éveillé",
 
 		-- some weird inconsistencies happening for older seasons, i'll put these for later but not gonna implement them yet
 		--ExplorerMF = "Explorateur", -- need to check old season
@@ -90,6 +94,7 @@ elseif LOCALE == "itIT" then
 		Champion = "Campione",
 		Hero = "Eroe",
 		Myth = "Mito",
+		Awakened = "Risvegliato",
 	};
 
 elseif LOCALE == "ptBR" then
@@ -101,6 +106,7 @@ elseif LOCALE == "ptBR" then
 		Champion = "Campeão",
 		Hero = "Herói",
 		Myth = "Mito",
+		Awakened = "Desperto",
 	};
 
 elseif LOCALE == "ruRU" then
@@ -112,6 +118,7 @@ elseif LOCALE == "ruRU" then
 		Champion = "Защитник",
 		Hero = "Герой",
 		Myth = "Легенда",
+		Awakened = "Пробужденный герой",
 
 		-- old season ruRU enums are all lowercase.
 	};
@@ -125,6 +132,7 @@ elseif LOCALE == "koKR" then
 		Champion = "챔피언",
 		Hero = "영웅",
 		Myth = "신화",
+		Awakened = "각성",
 
 		-- old season ITEM_UPGRADE_TOOLTIP_FORMAT_STRING is different from current season
 	};
@@ -138,6 +146,7 @@ elseif LOCALE == "zhCN" then
 		Champion = "勇士",
 		Hero = "英雄",
 		Myth = "神话",
+		Awakened = "觉醒",
 	};
 
 elseif LOCALE == "zhTW" then
@@ -149,6 +158,7 @@ elseif LOCALE == "zhTW" then
 		Champion = "勇士",
 		Hero = "英雄",
 		Myth = "神話",
+		Awakened = "英雄",
 
 		-- old season ITEM_UPGRADE_TOOLTIP_FORMAT_STRING is different from current season
 	};
@@ -164,7 +174,10 @@ local categoryDataTab = {
 	[categoryEnum.Champion] = {minLevel = 493, maxLevel = 515, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:87:121:1:35|t "},
 	[categoryEnum.Hero] = {minLevel = 506, maxLevel = 522, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:1:35:37:71|t "},
 	[categoryEnum.Myth] = {minLevel = 519, maxLevel = 528, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:20:20:0:0:128:128:86:122:42:78|t ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:20:20:0:0:128:128:42:78:42:78|t "}, -- Thanks to Peterodox for supplying this new texture!
+	[categoryEnum.Awakened] = {minLevel = 493, maxLevel = 528, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:20:20|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:20:20|a "},
 }
+
+local beegUpgrade = false
 
 local function SearchAndReplaceTooltipLine(tooltip, category)
 
@@ -180,6 +193,29 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 		end
 		
 		if text and text:match(patternUpgradeLevel) then
+			-- No category = fallback method
+			if not category then
+				local beforeText, afterText
+				beforeText, category, afterText = text:match(patternUpgradeLevel)
+			end
+
+			categoryData = category and categoryDataTab[category]
+
+			if not categoryData then return end -- Invalid/non-existent category
+
+			upgradeLevelLine = line
+
+			if text:match("14") then -- end boss trinkets and stuff have 14 upgrade levels insted of 12......... :(
+				beegUpgrade = true
+			else
+				beegUpgrade = false
+			end
+
+
+			break
+		end
+		
+		if text and text:match("14") then
 			-- No category = fallback method
 			if not category then
 				local beforeText, afterText
@@ -221,11 +257,22 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 					isCurrentSeason = true;
 
 					-- Not showing ilvl range on a max upgraded item
-					if ilvl ~= categoryData.maxLevel then
-						text = text .. "/" .. categoryData.maxLevel
+					if beegUpgrade == false then
+						if ilvl ~= categoryData.maxLevel then
+							text = text .. "/" .. categoryData.maxLevel
+							beegUpgrade = false
 
-						line:SetText(text)
-						line:Show()
+							line:SetText(text)
+							line:Show()
+						end
+					else
+						if ilvl ~= "535" then
+							text = text .. "/" .. "535"
+							beegUpgrade = false
+
+							line:SetText(text)
+							line:Show()
+						end
 					end
 
 					break
@@ -278,6 +325,8 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 			category = categoryEnum.Hero
 		elseif upgradeID >= 9380 and upgradeID <= 9382 then	-- 10.1.5
 			category = categoryEnum.Myth
+		elseif upgradeID >= 10884 and upgradeID <= 10884 then	-- 10.2.6 Season 4 Awakened
+			category = categoryEnum.Awakened
 		end
 	end
 
