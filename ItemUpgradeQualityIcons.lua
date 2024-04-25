@@ -174,14 +174,13 @@ local categoryDataTab = {
 	[categoryEnum.Champion] = {minLevel = 493, maxLevel = 515, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:87:121:1:35|t "},
 	[categoryEnum.Hero] = {minLevel = 506, maxLevel = 522, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:1:35:37:71|t "},
 	[categoryEnum.Myth] = {minLevel = 519, maxLevel = 528, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:20:20:0:0:128:128:86:122:42:78|t ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:20:20:0:0:128:128:42:78:42:78|t "}, -- Thanks to Peterodox for supplying this new texture!
-	[categoryEnum.Awakened] = {minLevel = 493, maxLevel = 528, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:20:20|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:20:20|a "},
+	[categoryEnum.Awakened] = {minLevel = 493, maxLevel = 528, upgradeLevelBeeg = 14, maxLevelBeeg = 535, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:20:20|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:20:20|a "},
 }
-
-local beegUpgrade = false
 
 local function SearchAndReplaceTooltipLine(tooltip, category)
 
 	local categoryData;
+	local beegUpgrade = false
 
 	-- Retrieving the upgrade line (need to do first because of fallback detection)
 	local upgradeLevelLine;
@@ -191,7 +190,7 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 		if line then
 			text = line:GetText()
 		end
-		
+
 		if text and text:match(patternUpgradeLevel) then
 			-- No category = fallback method
 			if not category then
@@ -205,28 +204,9 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 
 			upgradeLevelLine = line
 
-			if text:match("14") then -- end boss trinkets and stuff have 14 upgrade levels insted of 12......... :(
+			if categoryData.upgradeLevelBeeg and text:match(categoryData.upgradeLevelBeeg .. "$") then -- end boss trinkets and stuff have 14 upgrade levels instead of 12......... :(
 				beegUpgrade = true
-			else
-				beegUpgrade = false
 			end
-
-
-			break
-		end
-		
-		if text and text:match("14") then
-			-- No category = fallback method
-			if not category then
-				local beforeText, afterText
-				beforeText, category, afterText = text:match(patternUpgradeLevel)
-			end
-
-			categoryData = category and categoryDataTab[category]
-
-			if not categoryData then return end -- Invalid/non-existent category
-
-			upgradeLevelLine = line
 
 			break
 		end
@@ -257,22 +237,16 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 					isCurrentSeason = true;
 
 					-- Not showing ilvl range on a max upgraded item
-					if beegUpgrade == false then
-						if ilvl ~= categoryData.maxLevel then
-							text = text .. "/" .. categoryData.maxLevel
-							beegUpgrade = false
+					local itemMaxLevel = categoryData.maxLevel
+					if beegUpgrade and categoryData.maxLevelBeeg then
+						itemMaxLevel = categoryData.maxLevelBeeg
+					end
 
-							line:SetText(text)
-							line:Show()
-						end
-					else
-						if ilvl ~= "535" then
-							text = text .. "/" .. "535"
-							beegUpgrade = false
+					if ilvl ~= itemMaxLevel then
+						text = text .. "/" .. itemMaxLevel
 
-							line:SetText(text)
-							line:Show()
-						end
+						line:SetText(text)
+						line:Show()
 					end
 
 					break
@@ -325,7 +299,7 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 			category = categoryEnum.Hero
 		elseif upgradeID >= 9380 and upgradeID <= 9382 then	-- 10.1.5
 			category = categoryEnum.Myth
-		elseif upgradeID >= 10884 and upgradeID <= 10884 then	-- 10.2.6 Season 4 Awakened
+		elseif upgradeID == 10884 then	-- 10.2.6 Season 4 Awakened
 			category = categoryEnum.Awakened
 		end
 	end
