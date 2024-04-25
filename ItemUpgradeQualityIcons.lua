@@ -158,7 +158,7 @@ elseif LOCALE == "zhTW" then
 		Champion = "勇士",
 		Hero = "英雄",
 		Myth = "神話",
-		Awakened = "英雄",
+		Awakened = "覺醒",
 
 		-- old season ITEM_UPGRADE_TOOLTIP_FORMAT_STRING is different from current season
 	};

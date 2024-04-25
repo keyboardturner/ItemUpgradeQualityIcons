@@ -1,3 +1,7 @@
+# 0.1.8
+
+New icon for Awakened track gear now added, with included 528 (or 535 for certain items with 14 upgrade levels) item level cap displayed
+
 # 0.1.7
 
 [Season 4](https://worldofwarcraft.blizzard.com/en-us/news/24072151/dragonflight-season-4-dungeon-changes-ahead) ilevel range adjustments
