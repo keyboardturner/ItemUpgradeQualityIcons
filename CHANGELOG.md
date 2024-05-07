@@ -1,3 +1,7 @@
+# 0.1.9
+
+toc bump to 10.2.7
+
 # 0.1.8
 
 New icon for Awakened track gear now added, with included 528 (or 535 for certain items with 14 upgrade levels) item level cap displayed
