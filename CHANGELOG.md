@@ -1,6 +1,10 @@
-# 0.2.1
+# 0.2.2
 
 Fix to max value of veteran gear (was 610 for some reason)
+
+# 0.2.1
+
+War Within Season 0 Update
 
 # 0.2.0
 
