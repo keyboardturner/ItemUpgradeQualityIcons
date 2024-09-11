@@ -1,4 +1,4 @@
-# 0.2.0
+# 0.2.1
 
 Fix to max value of veteran gear (was 610 for some reason)
 
