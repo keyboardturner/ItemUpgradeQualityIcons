@@ -1,5 +1,9 @@
 # 0.2.0
 
+Fix to max value of veteran gear (was 610 for some reason)
+
+# 0.2.0
+
 TOC updates for TWW (but does not yet include data for launch++)
 
 # 0.1.9
