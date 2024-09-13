@@ -1,3 +1,7 @@
+# 0.2.3
+
+Curseforge please fix your uploader this isn't a duplicate I am legitimately trying to update my addon
+
 # 0.2.2
 
 Fix to max value of veteran gear (was 610 for some reason)
