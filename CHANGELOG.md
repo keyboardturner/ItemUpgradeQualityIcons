@@ -1,3 +1,7 @@
+# 0.2.8
+
+Fix Explorer ilvl range
+
 # 0.2.7
 
 Update ilvl ranges properly because apparently the gear is all gray now RIP season 1 2024-2025
