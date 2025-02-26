@@ -1,3 +1,7 @@
+# 0.2.7
+
+Update ilvl ranges properly because apparently the gear is all gray now RIP season 1 2024-2025
+
 # 0.2.6
 
 11.1.0 toc update
