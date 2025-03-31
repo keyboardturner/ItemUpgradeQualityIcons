@@ -34,6 +34,8 @@ local categoryDataTab = {
 	[categoryEnum.Awakened] = {minLevel = 493, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:20:20|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:20:20|a "}, -- update later maybe, for now this is OLD
 }
 
+-- TOOLTIP ICON
+
 local function SearchAndReplaceTooltipLine(tooltip)
 	local _, itemLink = TooltipUtil.GetDisplayedItem(tooltip)
 	if not itemLink then return end
@@ -97,3 +99,73 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tool
 	-- Searching the line
 	SearchAndReplaceTooltipLine(tooltip)
 end);
+
+-- CHARACTER FRAME ICON
+
+local anchorDataLeft = { from = "RIGHT", to = "LEFT", x = 10, y = 0 };
+local anchorDataRight = { from = "LEFT", to = "RIGHT", x = -10, y = 0 };
+local anchorDataBottom = { from = "TOP", to = "BOTTOM", x = 0, y = 5 };
+
+local inventoryItemSlotsList = {
+	[INVSLOT_HEAD] = { slotButton = CharacterHeadSlot, anchorData = anchorDataLeft },
+	[INVSLOT_NECK] = { slotButton = CharacterNeckSlot, anchorData = anchorDataLeft },
+	[INVSLOT_SHOULDER] = { slotButton = CharacterShoulderSlot, anchorData = anchorDataLeft },
+	[INVSLOT_CHEST] = { slotButton = CharacterChestSlot, anchorData = anchorDataLeft },
+	[INVSLOT_WRIST] = { slotButton = CharacterWristSlot, anchorData = anchorDataLeft },
+	[INVSLOT_BACK] = { slotButton = CharacterBackSlot, anchorData = anchorDataLeft },
+
+	[INVSLOT_WAIST] = { slotButton = CharacterWaistSlot, anchorData = anchorDataRight },
+	[INVSLOT_LEGS] = { slotButton = CharacterLegsSlot, anchorData = anchorDataRight },
+	[INVSLOT_FEET] = { slotButton = CharacterFeetSlot, anchorData = anchorDataRight },
+	[INVSLOT_HAND] = { slotButton = CharacterHandsSlot, anchorData = anchorDataRight },
+	[INVSLOT_FINGER1] = { slotButton = CharacterFinger0Slot, anchorData = anchorDataRight },
+	[INVSLOT_FINGER2] = { slotButton = CharacterFinger1Slot, anchorData = anchorDataRight },
+	[INVSLOT_TRINKET1] = { slotButton = CharacterTrinket0Slot, anchorData = anchorDataRight },
+	[INVSLOT_TRINKET2] = { slotButton = CharacterTrinket1Slot, anchorData = anchorDataRight },
+
+	[INVSLOT_MAINHAND] = { slotButton = CharacterMainHandSlot, anchorData = anchorDataBottom },
+	[INVSLOT_OFFHAND] = { slotButton = CharacterSecondaryHandSlot, anchorData = anchorDataBottom },
+};
+
+-- Updates a single slot's upgrade frame
+local function UpdateInventory(slotIndex)
+	local inventoryItemSlot = inventoryItemSlotsList[slotIndex]
+	if not inventoryItemSlot then return end
+
+	if not inventoryItemSlot.iconFrame then
+		inventoryItemSlot.iconFrame = inventoryItemSlot.slotButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+		inventoryItemSlot.iconFrame:SetPoint(inventoryItemSlot.anchorData.to, inventoryItemSlot.slotButton, inventoryItemSlot.anchorData.from, inventoryItemSlot.anchorData.x, inventoryItemSlot.anchorData.y)
+	end
+
+	local itemLink = GetInventoryItemLink("player", slotIndex)
+	if not itemLink then return end
+
+	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
+	if not itemUpgradeData then return end
+
+	local categoryData = categoryDataTab[itemUpgradeData.trackStringID]
+	if not categoryData then return end -- Invalid/non-existent category
+
+	local isCurrentSeason
+	local _, _, _, ilvl = C_Item.GetItemInfo(itemLink)
+	if ilvl >= categoryData.minLevel then
+		isCurrentSeason = true
+	end
+
+	if isCurrentSeason then
+		inventoryItemSlot.iconFrame:SetText(categoryDataTab[itemUpgradeData.trackStringID].icon)
+	else
+		inventoryItemSlot.iconFrame:SetText(categoryDataTab[itemUpgradeData.trackStringID].iconObsolete)
+	end
+end
+
+-- Updates all slots on login/reload
+for slotIndex = 1, 17 do
+	UpdateInventory(slotIndex)
+end
+
+EventRegistry:RegisterFrameEventAndCallback("PLAYER_EQUIPMENT_CHANGED", function(_, slotIndex, isEmpty)
+	if not isEmpty then
+		UpdateInventory(slotIndex)
+	end
+end)
