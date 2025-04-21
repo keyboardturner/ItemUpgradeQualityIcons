@@ -253,8 +253,10 @@ EventRegistry:RegisterFrameEventAndCallback("PLAYERBANKSLOTS_CHANGED", function(
 	if slotIndex > 28 then return end -- Bags changed, not an item slot
 
 	local bankItemButton = _G["BankFrameItem" .. slotIndex];
-	local itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
-	UpdateIcon(bankItemButton, itemLink)
+	if bankItemButton then
+		local itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
+		UpdateIcon(bankItemButton, itemLink)
+	end
 end)
 
 -- Update warbank when tab is opened

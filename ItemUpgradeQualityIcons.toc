@@ -30,5 +30,16 @@
 ## Notes-zhCN: 將專業品質等級添加到 Dragonflight 的可升級項目，例如探險家、冒險家、老兵、冠軍和英雄。
 ## Title-zhTW: Item Upgrade Quality Icons: 物品升級品質圖標
 ## Notes-zhTW: 將專業品質等級添加到 Dragonflight 的可升級項目，例如探險家、冒險家、老兵、冠軍和英雄。
+## Category-enUS: Equipment
+## Category-deDE: Ausrüstung
+## Category-esES: Equipo
+## Category-esMX: Equipo
+## Category-frFR: Équipement
+## Category-itIT: Equipaggiamento
+## Category-koKR: 장비
+## Category-ptBR: 
+## Category-ruRU: Экипировка
+## Category-zhCN: 装备
+## Category-zhTW: 裝備
 
 ItemUpgradeQualityIcons.lua
