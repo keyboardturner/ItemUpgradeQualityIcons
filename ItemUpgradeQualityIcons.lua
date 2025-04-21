@@ -187,6 +187,29 @@ local function UpdateWarbankFrame(warbankFrame)
 	end
 end
 
+-- Update equipment flyout frame (the buttons showing when Alt-hovering a gear slot)
+local function UpdateEquipmentFlyoutFrames(self)
+	for _, iconButton in ipairs(self.buttons) do
+		-- Retrieve the link from the bag slot or inventory slot (depending on item location)
+		local itemLocation = iconButton.location
+		local player, bank, bags, voidStorage, slot, bag, tab, voidSlot = EquipmentManager_UnpackLocation(itemLocation)
+		local itemLink;
+		if bags then
+			-- Item in player/bank bags (must be first as player or bank will also be true)
+			itemLink = C_Container.GetContainerItemLink(bag, slot)
+		elseif player then
+			-- Item on player inventory
+			itemLink = GetInventoryItemLink("player", slot)
+		elseif bank then
+			-- Item in bank
+			local bankItemButton = _G["BankFrameItem" .. (slot - 63)]; -- idk why it's offset by 63 leave me alone
+			itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
+		end
+
+		UpdateIcon(iconButton, itemLink)
+	end
+end
+
 -- EVENTS CALLBACKS
 
 -- Updates all slots on login/reload
@@ -238,3 +261,25 @@ end)
 AccountBankPanel:HookScript("OnShow", function(self) UpdateWarbankFrame(self) end)
 -- Update warbank when tab is changed
 hooksecurefunc(AccountBankPanel, "SelectTab", function(self) UpdateWarbankFrame(self) end)
+
+-- Update loot frame when opened
+EventRegistry:RegisterFrameEventAndCallback("LOOT_OPENED", function()
+	for slotIndex = 1, GetNumLootItems() do
+		-- Find loot element in the scrollbox
+		local lootElement = LootFrame.ScrollBox:FindFrameByPredicate(function(frame)
+			return frame:GetSlotIndex() == slotIndex
+		end)
+
+		-- Update it
+		if lootElement then
+			local iconButton = lootElement.Item
+			local itemLink = GetLootSlotLink(slotIndex)
+			UpdateIcon(iconButton, itemLink)
+		end
+	end
+end)
+
+-- Update equipment flyout frame when displaying it
+EquipmentFlyoutFrame:HookScript("OnShow", UpdateEquipmentFlyoutFrames)
+-- Update equipment flyout frame when it gets updated (gear changed)
+EquipmentFlyoutFrame:HookScript("OnEvent", UpdateEquipmentFlyoutFrames)
