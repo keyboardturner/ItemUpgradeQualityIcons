@@ -223,8 +223,10 @@ end)
 -- Update bank slots when they change
 EventRegistry:RegisterFrameEventAndCallback("PLAYERBANKSLOTS_CHANGED", function(_, slotIndex)
 	local bankItemButton = _G["BankFrameItem" .. slotIndex];
-	local itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
-	UpdateIcon(bankItemButton, itemLink)
+	if bankItemButton then
+		local itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
+		UpdateIcon(bankItemButton, itemLink)
+	end
 end)
 
 -- Update warbank when tab is opened
