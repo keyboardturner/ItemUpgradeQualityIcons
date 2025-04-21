@@ -25,14 +25,27 @@ local categoryEnum = {
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {minLevel = 597, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:1:31:73:107|t "},
-	[categoryEnum.Adventurer] = {minLevel = 610, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:1:47:1:35|t "},
-	[categoryEnum.Veteran] = {minLevel = 623, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:49:85:1:35|t "},
-	[categoryEnum.Champion] = {minLevel = 636, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:87:121:1:35|t "},
-	[categoryEnum.Hero] = {minLevel = 649, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:1:35:37:71|t "},
-	[categoryEnum.Myth] = {minLevel = 662, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:20:20:0:0:128:128:86:122:42:78|t ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:20:20:0:0:128:128:42:78:42:78|t "}, -- Thanks to Peterodox for supplying this new texture!
-	[categoryEnum.Awakened] = {minLevel = 493, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:20:20|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:20:20|a "}, -- update later maybe, for now this is OLD
+	[categoryEnum.Explorer] = {minLevel = 597, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:31:73:107|t "},
+	[categoryEnum.Adventurer] = {minLevel = 610, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:47:1:35|t "},
+	[categoryEnum.Veteran] = {minLevel = 623, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:49:85:1:35|t "},
+	[categoryEnum.Champion] = {minLevel = 636, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:87:121:1:35|t "},
+	[categoryEnum.Hero] = {minLevel = 649, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:35:37:71|t "},
+	[categoryEnum.Myth] = {minLevel = 662, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:42:78:42:78|t "}, -- Thanks to Peterodox for supplying this new texture!
+	[categoryEnum.Awakened] = {minLevel = 493, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a "}, -- update later maybe, for now this is OLD
 }
+
+local function getIcon(categoryData, isCurrentSeason, size)
+	local iconString;
+	if isCurrentSeason then
+		-- Current season
+		iconString = categoryData.icon
+	else
+		-- Previous season
+		iconString = categoryData.iconObsolete
+	end
+
+	return iconString:format(size, size)
+end
 
 -- TOOLTIP ICON
 
@@ -77,13 +90,7 @@ local function SearchAndReplaceTooltipLine(tooltip)
 				end
 			elseif text:match(patternUpgradeLevel) then
 				-- Ilvl line is always above the upgrade line, so this order works
-				if isCurrentSeason then
-					-- Current season
-					text = text:gsub(patternUpgradeLevel, "%1" .. categoryData.icon .. "%2%3")
-				else
-					-- Previous season
-					text = text:gsub(patternUpgradeLevel, "%1" .. categoryData.iconObsolete .. "%2%3")
-				end
+				text = text:gsub(patternUpgradeLevel, "%1" .. getIcon(categoryData, isCurrentSeason, 20) .. "%2%3")
 
 				line:SetText(text)
 				line:Show()
@@ -102,42 +109,35 @@ end);
 
 -- CHARACTER FRAME ICON
 
-local anchorDataLeft = { from = "RIGHT", to = "LEFT", x = 10, y = 0 };
-local anchorDataRight = { from = "LEFT", to = "RIGHT", x = -10, y = 0 };
-local anchorDataBottom = { from = "TOP", to = "BOTTOM", x = 0, y = 5 };
-
 local inventoryItemSlotsList = {
-	[INVSLOT_HEAD] = { slotButton = CharacterHeadSlot, anchorData = anchorDataLeft },
-	[INVSLOT_NECK] = { slotButton = CharacterNeckSlot, anchorData = anchorDataLeft },
-	[INVSLOT_SHOULDER] = { slotButton = CharacterShoulderSlot, anchorData = anchorDataLeft },
-	[INVSLOT_CHEST] = { slotButton = CharacterChestSlot, anchorData = anchorDataLeft },
-	[INVSLOT_WRIST] = { slotButton = CharacterWristSlot, anchorData = anchorDataLeft },
-	[INVSLOT_BACK] = { slotButton = CharacterBackSlot, anchorData = anchorDataLeft },
+	[INVSLOT_HEAD] = { slotButton = CharacterHeadSlot },
+	[INVSLOT_NECK] = { slotButton = CharacterNeckSlot },
+	[INVSLOT_SHOULDER] = { slotButton = CharacterShoulderSlot },
+	[INVSLOT_CHEST] = { slotButton = CharacterChestSlot },
+	[INVSLOT_WRIST] = { slotButton = CharacterWristSlot },
+	[INVSLOT_BACK] = { slotButton = CharacterBackSlot },
 
-	[INVSLOT_WAIST] = { slotButton = CharacterWaistSlot, anchorData = anchorDataRight },
-	[INVSLOT_LEGS] = { slotButton = CharacterLegsSlot, anchorData = anchorDataRight },
-	[INVSLOT_FEET] = { slotButton = CharacterFeetSlot, anchorData = anchorDataRight },
-	[INVSLOT_HAND] = { slotButton = CharacterHandsSlot, anchorData = anchorDataRight },
-	[INVSLOT_FINGER1] = { slotButton = CharacterFinger0Slot, anchorData = anchorDataRight },
-	[INVSLOT_FINGER2] = { slotButton = CharacterFinger1Slot, anchorData = anchorDataRight },
-	[INVSLOT_TRINKET1] = { slotButton = CharacterTrinket0Slot, anchorData = anchorDataRight },
-	[INVSLOT_TRINKET2] = { slotButton = CharacterTrinket1Slot, anchorData = anchorDataRight },
+	[INVSLOT_WAIST] = { slotButton = CharacterWaistSlot },
+	[INVSLOT_LEGS] = { slotButton = CharacterLegsSlot },
+	[INVSLOT_FEET] = { slotButton = CharacterFeetSlot },
+	[INVSLOT_HAND] = { slotButton = CharacterHandsSlot },
+	[INVSLOT_FINGER1] = { slotButton = CharacterFinger0Slot },
+	[INVSLOT_FINGER2] = { slotButton = CharacterFinger1Slot },
+	[INVSLOT_TRINKET1] = { slotButton = CharacterTrinket0Slot },
+	[INVSLOT_TRINKET2] = { slotButton = CharacterTrinket1Slot },
 
-	[INVSLOT_MAINHAND] = { slotButton = CharacterMainHandSlot, anchorData = anchorDataBottom },
-	[INVSLOT_OFFHAND] = { slotButton = CharacterSecondaryHandSlot, anchorData = anchorDataBottom },
+	[INVSLOT_MAINHAND] = { slotButton = CharacterMainHandSlot },
+	[INVSLOT_OFFHAND] = { slotButton = CharacterSecondaryHandSlot },
 };
 
--- Updates a single slot's upgrade frame
-local function UpdateInventory(slotIndex)
-	local inventoryItemSlot = inventoryItemSlotsList[slotIndex]
-	if not inventoryItemSlot then return end
-
-	if not inventoryItemSlot.iconFrame then
-		inventoryItemSlot.iconFrame = inventoryItemSlot.slotButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-		inventoryItemSlot.iconFrame:SetPoint(inventoryItemSlot.anchorData.to, inventoryItemSlot.slotButton, inventoryItemSlot.anchorData.from, inventoryItemSlot.anchorData.x, inventoryItemSlot.anchorData.y)
+local function UpdateIcon(iconButton, itemLink)
+	if not iconButton.IUQI_iconFrame then
+		iconButton.IUQI_iconFrame = iconButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+		iconButton.IUQI_iconFrame:SetPoint("TOPLEFT", iconButton, "TOPLEFT", -3, 2)
 	end
 
-	local itemLink = GetInventoryItemLink("player", slotIndex)
+	iconButton.IUQI_iconFrame:SetText("")
+
 	if not itemLink then return end
 
 	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
@@ -152,20 +152,82 @@ local function UpdateInventory(slotIndex)
 		isCurrentSeason = true
 	end
 
-	if isCurrentSeason then
-		inventoryItemSlot.iconFrame:SetText(categoryDataTab[itemUpgradeData.trackStringID].icon)
-	else
-		inventoryItemSlot.iconFrame:SetText(categoryDataTab[itemUpgradeData.trackStringID].iconObsolete)
+	iconButton.IUQI_iconFrame:SetText(getIcon(categoryDataTab[itemUpgradeData.trackStringID], isCurrentSeason, 18))
+end
+
+-- CONTAINERS
+
+-- Updates a single slot's upgrade frame
+local function UpdateInventory(slotIndex)
+	local inventoryItemSlot = inventoryItemSlotsList[slotIndex]
+	if not inventoryItemSlot then return end
+
+	local itemLink = GetInventoryItemLink("player", slotIndex)
+	UpdateIcon(inventoryItemSlot.slotButton, itemLink)
+end
+
+-- Update a bag/bank frame
+local function UpdateContainerFrame(containerFrame)
+	if not containerFrame then return end
+
+	for _, itemButton in containerFrame:EnumerateValidItems() do
+		local itemLink = C_Container.GetContainerItemLink(itemButton:GetBagID(), itemButton:GetID())
+		UpdateIcon(itemButton, itemLink)
 	end
 end
+
+-- Update a warbank frame
+local function UpdateWarbankFrame(warbankFrame)
+	if not warbankFrame then return end
+
+	-- Of course EnumerateValidItems works differently on the warbank because why not
+	for itemButton in warbankFrame:EnumerateValidItems() do
+		local itemLink = C_Container.GetContainerItemLink(itemButton:GetBankTabID(), itemButton:GetContainerSlotID())
+		UpdateIcon(itemButton, itemLink)
+	end
+end
+
+-- EVENTS CALLBACKS
 
 -- Updates all slots on login/reload
-for slotIndex = 1, 17 do
-	UpdateInventory(slotIndex)
-end
-
-EventRegistry:RegisterFrameEventAndCallback("PLAYER_EQUIPMENT_CHANGED", function(_, slotIndex, isEmpty)
-	if not isEmpty then
+EventRegistry:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, slotIndex, isEmpty)
+	for slotIndex = 1, 17 do
 		UpdateInventory(slotIndex)
+	end	
+end)
+
+-- Update a slot when gear changes
+EventRegistry:RegisterFrameEventAndCallback("PLAYER_EQUIPMENT_CHANGED", function(_, slotIndex, isEmpty)
+	UpdateInventory(slotIndex)
+end)
+
+-- Update bag slots when opening the bag frame
+EventRegistry:RegisterCallback("ContainerFrame.OpenBag", function()
+	UpdateContainerFrame(self)
+end, self)
+
+-- Update bag slots when something changes inside it (moving items around)
+EventRegistry:RegisterFrameEventAndCallback("BAG_UPDATE", function(_, bagIndex)
+	if bagIndex < 13 then
+		UpdateContainerFrame(ContainerFrameUtil_GetShownFrameForID(bagIndex))
+	else
+		UpdateWarbankFrame(AccountBankPanel)
 	end
 end)
+
+-- Update bank slots when bank frame is opened
+EventRegistry:RegisterFrameEventAndCallback("BANKFRAME_OPENED", function()
+	UpdateContainerFrame(BankFrame)
+end)
+
+-- Update bank slots when they change
+EventRegistry:RegisterFrameEventAndCallback("PLAYERBANKSLOTS_CHANGED", function(_, slotIndex)
+	local bankItemButton = _G["BankFrameItem" .. slotIndex];
+	local itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
+	UpdateIcon(bankItemButton, itemLink)
+end)
+
+-- Update warbank when tab is opened
+AccountBankPanel:HookScript("OnShow", function(self) UpdateWarbankFrame(self) end)
+-- Update warbank when tab is changed
+hooksecurefunc(AccountBankPanel, "SelectTab", function(self) UpdateWarbankFrame(self) end)
