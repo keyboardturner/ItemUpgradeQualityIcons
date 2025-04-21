@@ -203,8 +203,13 @@ end)
 
 -- Update bag slots when opening the bag frame
 EventRegistry:RegisterCallback("ContainerFrame.OpenBag", function()
-	UpdateContainerFrame(self)
-end, self)
+	for bagID = 0, 12 do
+		local containerFrame = ContainerFrameUtil_GetShownFrameForID(bagID)
+		if containerFrame then
+			UpdateContainerFrame(containerFrame)
+		end
+	end
+end)
 
 -- Update bag slots when something changes inside it (moving items around)
 EventRegistry:RegisterFrameEventAndCallback("BAG_UPDATE", function(_, bagIndex)
@@ -222,6 +227,8 @@ end)
 
 -- Update bank slots when they change
 EventRegistry:RegisterFrameEventAndCallback("PLAYERBANKSLOTS_CHANGED", function(_, slotIndex)
+	if slotIndex > 28 then return end -- Bags changed, not an item slot
+
 	local bankItemButton = _G["BankFrameItem" .. slotIndex];
 	local itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
 	UpdateIcon(bankItemButton, itemLink)
