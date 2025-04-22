@@ -1,3 +1,6 @@
+local ItemUpgradeQualityIcons, IUQI = ...
+local _, L = ...
+
 -- Turning global string into pattern to match
 local patternUpgradeLevel = ITEM_UPGRADE_TOOLTIP_FORMAT_STRING -- ITEM_UPGRADE_FRAME_CURRENT_UPGRADE_FORMAT_STRING also works
 patternUpgradeLevel = patternUpgradeLevel:gsub("%%s", ")(.*)(")
@@ -292,3 +295,98 @@ end)
 EquipmentFlyoutFrame:HookScript("OnShow", UpdateEquipmentFlyoutFrames)
 -- Update equipment flyout frame when it gets updated (gear changed)
 EquipmentFlyoutFrame:HookScript("OnEvent", UpdateEquipmentFlyoutFrames)
+
+
+-- SavedVariables Defaults
+local defaultsTable = {
+	iconLocation = 1,
+	iconScale = 1,
+};
+
+local function OnAddonLoaded()
+
+	do
+		if IUQI_DB == nil then
+			IUQI_DB = CopyTable(defaultsTable);
+		end
+
+		---------------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------------------------
+
+		local function OnSettingChanged(_, setting, value)
+			local variable = setting:GetVariable()
+
+			if strsub(variable, 1, 3) == "IUQI_" then
+				variable = strsub(variable, 4); -- remove our prefix so it matches existing savedvar keys
+			end
+
+			--DR.setPositions()
+		end
+
+		local category, layout = Settings.RegisterVerticalLayoutCategory("Item Upgrade Quality Icons")
+		--local subcategory, layout2 = Settings.RegisterVerticalLayoutSubcategory(category, "my very own subcategory")
+
+		local CreateDropdown = Settings.CreateDropdown or Settings.CreateDropDown
+		local CreateCheckbox = Settings.CreateCheckbox or Settings.CreateCheckBox
+
+		local function RegisterSetting(variableKey, defaultValue, name)
+			local uniqueVariable = "IUQI_" .. variableKey; -- these have to be unique or calamity ensues, savedvars will be unaffected
+
+			local setting;
+			setting = Settings.RegisterAddOnSetting(category, uniqueVariable, variableKey, IUQI_DB, type(defaultValue), name, defaultValue);
+
+			setting:SetValue(IUQI_DB[variableKey]);
+			Settings.SetOnValueChangedCallback(uniqueVariable, OnSettingChanged);
+
+			return setting;
+		end
+
+		do
+			local variable = "iconLocation"
+			local defaultValue = 1  -- Corresponds to "Option 1" below.
+			local name = L["iconLocation"]
+			local tooltip = L["iconLocationTT"]
+
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				container:Add(1, L["TOPLEFT"])
+				container:Add(2, L["TOP"])
+				container:Add(3, L["TOPRIGHT"])
+				container:Add(4, L["LEFT"])
+				container:Add(5, L["CENTER"])
+				container:Add(6, L["RIGHT"])
+				container:Add(7, L["BOTTOMLEFT"])
+				container:Add(8, L["BOTTOM"])
+				container:Add(9, L["BOTTOMRIGHT"])
+				container:Add(10, L["NONE"])
+				return container:GetData()
+			end
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateDropdown(category, setting, GetOptions, tooltip)
+		end
+
+		do
+			local variable = "iconScale"
+			local name = L["iconScale"]
+			local tooltip = L["iconScaleTT"]
+			local defaultValue = 1
+			local minValue = .4
+			local maxValue = 4
+			local step = .1
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			local options = Settings.CreateSliderOptions(minValue, maxValue, step)
+			options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+			Settings.CreateSlider(category, setting, options, tooltip)
+		end
+
+		Settings.RegisterAddOnCategory(category)
+
+		---------------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------------------------
+	end
+end
+
+EventUtil.ContinueOnAddOnLoaded("ItemUpgradeQualityIcons", OnAddonLoaded);
