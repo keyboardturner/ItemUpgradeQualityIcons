@@ -1,3 +1,9 @@
+# 0.2.9
+
+11.1.5 toc update & addon category
+
+Added icons for character equipment slots and bags (may be buggy with bag addons)
+
 # 0.2.8
 
 Fix Explorer ilvl range

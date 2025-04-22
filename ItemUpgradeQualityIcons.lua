@@ -1,10 +1,11 @@
+local ItemUpgradeQualityIcons, IUQI = ...
+local _, L = ...
+
 -- Turning global string into pattern to match
 local patternUpgradeLevel = ITEM_UPGRADE_TOOLTIP_FORMAT_STRING -- ITEM_UPGRADE_FRAME_CURRENT_UPGRADE_FORMAT_STRING also works
 patternUpgradeLevel = patternUpgradeLevel:gsub("%%s", ")(.*)(")
 patternUpgradeLevel = patternUpgradeLevel:gsub("%%d", "[0-9]+")
 patternUpgradeLevel = "(" .. patternUpgradeLevel .. ")"
-
-local LOCALE = GetLocale()
 
 local patternIlvl = ITEM_LEVEL
 
@@ -16,206 +17,50 @@ patternIlvl = "^" .. patternIlvl:gsub("%%d", "([0-9]+)") .. "$" -- Our actual pr
 --patternIlvl = "^" .. patternIlvl:gsub("%%1%$d", "([0-9]+)") .. "$" -- This was the old code for Russian
 
 local categoryEnum = {
-	Explorer = "Explorer",
-	Adventurer = "Adventurer",
-	Veteran = "Veteran",
-	Champion = "Champion",
-	Hero = "Hero",
-	Myth = "Myth", -- 10.1.5
+	Explorer = 970,
+	Adventurer = 971,
+	Veteran = 972,
+	Champion = 973,
+	Hero = 974,
+	Myth = 978, -- 10.1.5
+	Awakened = 1 -- Until reused, no idea what its ID is and no point figuring it out
 };
-
-if LOCALE == "enUS" or LOCALE == "enCN" or LOCALE == "enGB" or LOCALE == "enTW" then
-
-	-- Name keys (should have a way to localize keys)
-	categoryEnum = {
-		Explorer = "Explorer",
-		Adventurer = "Adventurer",
-		Veteran = "Veteran",
-		Champion = "Champion",
-		Hero = "Hero",
-		Myth = "Myth",
-		Awakened = "Awakened",
-	};
-
-elseif LOCALE == "deDE" then
-
-	categoryEnum = {
-		Explorer = "Forscher",
-		Adventurer = "Abenteurer",
-		Veteran = "Veteran",
-		Champion = "Champion",
-		Hero = "Held",
-		Myth = "Mythos",
-		Awakened = "Erweckt",
-
-		--ITEM_LEVEL / ITEM_UPGRADE_ITEM_LEVEL_STAT_FORMAT = "Stufe aufwerten: %s %d/%d" for current season, but is "Aufwertungsgrad: %s %d/%d" for old season.
-	};
-
-elseif LOCALE == "esES" or LOCALE == "esMX" then
-
-	categoryEnum = {
-		Explorer = "Expedicionario",
-		Adventurer = "Aventurero",
-		Veteran = "Veterano",
-		Champion = "Campeón",
-		Hero = "Héroe",
-		Myth = "Mito",
-		Awakened = "Despierto",
-
-		-- old season esES enums are all lowercase.
-	};
-
-elseif LOCALE == "frFR" then
-
-	categoryEnum = {
-		Explorer = "Explorateur",
-		Adventurer = "Aventurier",
-		Veteran = "Vétéran",
-		Champion = "Champion",
-		Hero = "Héros",
-		Myth = "Mythe",
-		Awakened = "Éveillé",
-
-		-- some weird inconsistencies happening for older seasons, i'll put these for later but not gonna implement them yet
-		--ExplorerMF = "Explorateur", -- need to check old season
-		--AdventurerMF = "Aventurier", -- need to check old season
-		--VeteranMF = "vétéran ou vétérane",
-		--ChampionMF = "champion ou championne",
-		--HeroMF = "héros ou héroïne",
-		--MythMF = "mythique",
-	};
-
-elseif LOCALE == "itIT" then
-
-	categoryEnum = {
-		Explorer = "Esploratore",
-		Adventurer = "Avventuriero",
-		Veteran = "Veterano",
-		Champion = "Campione",
-		Hero = "Eroe",
-		Myth = "Mito",
-		Awakened = "Risvegliato",
-	};
-
-elseif LOCALE == "ptBR" then
-
-	categoryEnum = {
-		Explorer = "Explorador",
-		Adventurer = "Aventureiro",
-		Veteran = "Veterano",
-		Champion = "Campeão",
-		Hero = "Herói",
-		Myth = "Mito",
-		Awakened = "Desperto",
-	};
-
-elseif LOCALE == "ruRU" then
-
-	categoryEnum = {
-		Explorer = "Исследователь",
-		Adventurer = "Искатель приключений",
-		Veteran = "Ветеран",
-		Champion = "Защитник",
-		Hero = "Герой",
-		Myth = "Легенда",
-		Awakened = "Пробужденный герой",
-
-		-- old season ruRU enums are all lowercase.
-	};
-
-elseif LOCALE == "koKR" then
-
-	categoryEnum = {
-		Explorer = "탐험가",
-		Adventurer = "모험가",
-		Veteran = "노련가",
-		Champion = "챔피언",
-		Hero = "영웅",
-		Myth = "신화",
-		Awakened = "각성",
-
-		-- old season ITEM_UPGRADE_TOOLTIP_FORMAT_STRING is different from current season
-	};
-
-elseif LOCALE == "zhCN" then
-
-	categoryEnum = {
-		Explorer = "探索者",
-		Adventurer = "冒险者",
-		Veteran = "老兵",
-		Champion = "勇士",
-		Hero = "英雄",
-		Myth = "神话",
-		Awakened = "觉醒",
-	};
-
-elseif LOCALE == "zhTW" then
-
-	categoryEnum = {
-		Explorer = "探險者",
-		Adventurer = "冒險者",
-		Veteran = "精兵",
-		Champion = "勇士",
-		Hero = "英雄",
-		Myth = "神話",
-		Awakened = "覺醒",
-
-		-- old season ITEM_UPGRADE_TOOLTIP_FORMAT_STRING is different from current season
-	};
-
-end
-
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {minLevel = 597, maxLevel = 619, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:1:31:73:107|t "},
-	[categoryEnum.Adventurer] = {minLevel = 610, maxLevel = 632, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:1:47:1:35|t "},
-	[categoryEnum.Veteran] = {minLevel = 623, maxLevel = 645, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:49:85:1:35|t "},
-	[categoryEnum.Champion] = {minLevel = 636, maxLevel = 658, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:87:121:1:35|t "},
-	[categoryEnum.Hero] = {minLevel = 649, maxLevel = 665, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:20:20|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:20:20:0:0:128:128:1:35:37:71|t "},
-	[categoryEnum.Myth] = {minLevel = 662, maxLevel = 678, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:20:20:0:0:128:128:86:122:42:78|t ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:20:20:0:0:128:128:42:78:42:78|t "}, -- Thanks to Peterodox for supplying this new texture!
-	[categoryEnum.Awakened] = {minLevel = 493, maxLevel = 528, upgradeLevelBeeg = 14, maxLevelBeeg = 535, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:20:20|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:20:20|a "}, -- update later maybe, for now this is OLD
+	[categoryEnum.Explorer] = {minLevel = 597, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:31:73:107|t "},
+	[categoryEnum.Adventurer] = {minLevel = 610, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:47:1:35|t "},
+	[categoryEnum.Veteran] = {minLevel = 623, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:49:85:1:35|t "},
+	[categoryEnum.Champion] = {minLevel = 636, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:87:121:1:35|t "},
+	[categoryEnum.Hero] = {minLevel = 649, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:35:37:71|t "},
+	[categoryEnum.Myth] = {minLevel = 662, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:42:78:42:78|t "}, -- Thanks to Peterodox for supplying this new texture!
+	[categoryEnum.Awakened] = {minLevel = 493, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a "}, -- update later maybe, for now this is OLD
 }
 
-local function SearchAndReplaceTooltipLine(tooltip, category)
-
-	local categoryData;
-	local beegUpgrade = false
-
-	-- Retrieving the upgrade line (need to do first because of fallback detection)
-	local upgradeLevelLine;
-	for i = 1, tooltip:NumLines() do
-		local line = _G[tooltip:GetName().."TextLeft"..i]
-		local text
-		if line then
-			text = line:GetText()
-		end
-
-		if text and text:match(patternUpgradeLevel) then
-			-- No category = fallback method
-			if not category then
-				local beforeText, afterText
-				beforeText, category, afterText = text:match(patternUpgradeLevel)
-			end
-
-			categoryData = category and categoryDataTab[category]
-
-			if not categoryData then return end -- Invalid/non-existent category
-
-			upgradeLevelLine = line
-
-			if categoryData.upgradeLevelBeeg and text:match(categoryData.upgradeLevelBeeg .. "$") then -- end boss trinkets and stuff have 14 upgrade levels instead of 12......... :(
-				beegUpgrade = true
-			end
-
-			break
-		end
+local function getIcon(categoryData, isCurrentSeason, size)
+	local iconString;
+	if isCurrentSeason then
+		-- Current season
+		iconString = categoryData.icon
+	else
+		-- Previous season
+		iconString = categoryData.iconObsolete
 	end
 
-	-- Invalid/non-existent category
-	if not categoryData then
-		return
-	end
+	return iconString:format(size, size)
+end
+
+-- TOOLTIP ICON
+
+local function SearchAndReplaceTooltipLine(tooltip)
+	local _, itemLink = TooltipUtil.GetDisplayedItem(tooltip)
+	if not itemLink then return end
+
+	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
+	if not itemUpgradeData then return end
+
+	local categoryData = categoryDataTab[itemUpgradeData.trackStringID]
+	if not categoryData then return end -- Invalid/non-existent category
 
 	local isCurrentSeason;
 
@@ -232,15 +77,12 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 			local ilvl = tonumber(text:match(patternIlvl));
 			if ilvl then
 				-- Checking if the ilvl is in the right range (otherwise it's a previous season item)
-				if ilvl >= categoryData.minLevel and ilvl <= categoryData.maxLevel then
+				if ilvl >= categoryData.minLevel then
 
 					isCurrentSeason = true;
 
 					-- Not showing ilvl range on a max upgraded item
-					local itemMaxLevel = categoryData.maxLevel
-					if beegUpgrade and categoryData.maxLevelBeeg then
-						itemMaxLevel = categoryData.maxLevelBeeg
-					end
+					local itemMaxLevel = itemUpgradeData.maxItemLevel
 
 					if ilvl ~= itemMaxLevel then
 						text = text .. "/" .. itemMaxLevel
@@ -248,69 +90,336 @@ local function SearchAndReplaceTooltipLine(tooltip, category)
 						line:SetText(text)
 						line:Show()
 					end
-
-					break
 				end
+			elseif text:match(patternUpgradeLevel) then
+				-- Ilvl line is always above the upgrade line, so this order works
+				text = text:gsub(patternUpgradeLevel, "%1" .. getIcon(categoryData, isCurrentSeason, 20) .. "%2%3")
+
+				line:SetText(text)
+				line:Show()
+
+				-- We can break, no more relevant lines
+				break
 			end
 		end
 	end
-
-	-- Editing the upgrade line
-	if categoryData and upgradeLevelLine then
-		local text = upgradeLevelLine:GetText()
-
-		if isCurrentSeason then
-			-- Current season
-			text = text:gsub(patternUpgradeLevel, "%1" .. categoryData.icon .. "%2%3")
-		else
-			-- Previous season
-			text = text:gsub(patternUpgradeLevel, "%1" .. categoryData.iconObsolete .. "%2%3")
-		end
-
-		upgradeLevelLine:SetText(text)
-		upgradeLevelLine:Show()
-	end
-
 end
 
 TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(tooltip)
-	local _, itemLink = TooltipUtil.GetDisplayedItem(tooltip)
+	-- Searching the line
+	SearchAndReplaceTooltipLine(tooltip)
+end);
+
+-- CHARACTER FRAME ICON
+
+local inventoryItemSlotsList = {
+	[INVSLOT_HEAD] = { slotButton = CharacterHeadSlot },
+	[INVSLOT_NECK] = { slotButton = CharacterNeckSlot },
+	[INVSLOT_SHOULDER] = { slotButton = CharacterShoulderSlot },
+	[INVSLOT_CHEST] = { slotButton = CharacterChestSlot },
+	[INVSLOT_WRIST] = { slotButton = CharacterWristSlot },
+	[INVSLOT_BACK] = { slotButton = CharacterBackSlot },
+
+	[INVSLOT_WAIST] = { slotButton = CharacterWaistSlot },
+	[INVSLOT_LEGS] = { slotButton = CharacterLegsSlot },
+	[INVSLOT_FEET] = { slotButton = CharacterFeetSlot },
+	[INVSLOT_HAND] = { slotButton = CharacterHandsSlot },
+	[INVSLOT_FINGER1] = { slotButton = CharacterFinger0Slot },
+	[INVSLOT_FINGER2] = { slotButton = CharacterFinger1Slot },
+	[INVSLOT_TRINKET1] = { slotButton = CharacterTrinket0Slot },
+	[INVSLOT_TRINKET2] = { slotButton = CharacterTrinket1Slot },
+
+	[INVSLOT_MAINHAND] = { slotButton = CharacterMainHandSlot },
+	[INVSLOT_OFFHAND] = { slotButton = CharacterSecondaryHandSlot },
+};
+
+local function IconLocation(frame,relativeTo)
+	if not IUQI_DB then
+		frame:SetPoint("TOPLEFT", relativeTo, "TOPLEFT", -3, 2)
+		return
+	end
+
+	if IUQI_DB.iconLocation == 10 then
+		frame:ClearAllPoints();
+		return
+	end
+
+	local positions = {
+		[1] = {"TOPLEFT", relativeTo, "TOPLEFT", -3, 2},
+		[2] = {"TOP", relativeTo, "TOP", 0, 2},
+		[3] = {"TOPRIGHT", relativeTo, "TOPRIGHT", 3, 2},
+		[4] = {"LEFT", relativeTo, "LEFT", -3, 0},
+		[5] = {"CENTER", relativeTo, "CENTER", 0, 0},
+		[6] = {"RIGHT", relativeTo, "RIGHT", 3, 0},
+		[7] = {"BOTTOMLEFT", relativeTo, "BOTTOMLEFT", -3, -2},
+		[8] = {"BOTTOM", relativeTo, "BOTTOM", 0, -2},
+		[9] = {"BOTTOMRIGHT", relativeTo, "BOTTOMRIGHT", 3, -2},
+		[10] = {nil, nil, nil, 0, 0},
+	};
+
+	frame:ClearAllPoints();
+	frame:SetPoint(unpack(positions[IUQI_DB.iconLocation] or positions[1]));
+end
+
+local function IconScale(frame)
+	if not IUQI_DB then return end
+	frame:SetScale(IUQI_DB.iconScale);
+end
+
+local function UpdateIcon(iconButton, itemLink)
+	if not iconButton.IUQI_iconFrame then
+		iconButton.IUQI_iconFrame = iconButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+		iconButton.IUQI_iconFrame:SetPoint("TOPLEFT", iconButton, "TOPLEFT", -3, 2)
+	end
+
+	IconLocation(iconButton.IUQI_iconFrame,iconButton)
+	IconScale(iconButton.IUQI_iconFrame)
+	iconButton.IUQI_iconFrame:SetText("")
+
 	if not itemLink then return end
 
-	local itemLinkValues = StringSplitIntoTable(":", itemLink)
-	local numBonusIDs = tonumber(itemLinkValues[14])
+	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
+	if not itemUpgradeData then return end
 
-	if not numBonusIDs then return end
-	local category;
-	for i = 1, numBonusIDs do
-		local upgradeID = tonumber(itemLinkValues[14 + i])
-		if upgradeID == nil then
-			return
-		end
-		if upgradeID >= 9294 and upgradeID <= 9301 then
-			category = categoryEnum.Explorer
-		elseif upgradeID >= 9301 and upgradeID <= 9309 then
-			category = categoryEnum.Adventurer
-		elseif upgradeID >= 9313 and upgradeID <= 9320 then
-			category = categoryEnum.Veteran
-		elseif upgradeID >= 9321 and upgradeID <= 9329 then
-			category = categoryEnum.Champion
-		elseif upgradeID >= 9330 and upgradeID <= 9334 then
-			category = categoryEnum.Hero
-		elseif upgradeID >= 9380 and upgradeID <= 9382 then	-- 10.1.5
-			category = categoryEnum.Myth
-		elseif upgradeID == 10884 then	-- 10.2.6 Season 4 Awakened
-			category = categoryEnum.Awakened
-		end
+	local categoryData = categoryDataTab[itemUpgradeData.trackStringID]
+	if not categoryData then return end -- Invalid/non-existent category
+
+	local isCurrentSeason
+	local _, _, _, ilvl = C_Item.GetItemInfo(itemLink)
+	if ilvl >= categoryData.minLevel then
+		isCurrentSeason = true
 	end
 
-	-- Searching the line
-	SearchAndReplaceTooltipLine(tooltip) -- (tooltip, category) once Blizz fixes the stale tooltips issue
-	
-	-- Compare tooltips
-	if tooltip.shoppingTooltips then
-		for _, shoppingTooltip in ipairs(tooltip.shoppingTooltips) do
-			SearchAndReplaceTooltipLine(shoppingTooltip)
+	iconButton.IUQI_iconFrame:SetText(getIcon(categoryDataTab[itemUpgradeData.trackStringID], isCurrentSeason, 18))
+end
+
+-- CONTAINERS
+
+-- Updates a single slot's upgrade frame
+local function UpdateInventory(slotIndex)
+	local inventoryItemSlot = inventoryItemSlotsList[slotIndex]
+	if not inventoryItemSlot then return end
+
+	local itemLink = GetInventoryItemLink("player", slotIndex)
+	UpdateIcon(inventoryItemSlot.slotButton, itemLink)
+end
+
+-- Update a bag/bank frame
+local function UpdateContainerFrame(containerFrame)
+	if not containerFrame then return end
+
+	for _, itemButton in containerFrame:EnumerateValidItems() do
+		local itemLink = C_Container.GetContainerItemLink(itemButton:GetBagID(), itemButton:GetID())
+		UpdateIcon(itemButton, itemLink)
+	end
+end
+
+-- Update a warbank frame
+local function UpdateWarbankFrame(warbankFrame)
+	if not warbankFrame then return end
+
+	-- Of course EnumerateValidItems works differently on the warbank because why not
+	for itemButton in warbankFrame:EnumerateValidItems() do
+		local itemLink = C_Container.GetContainerItemLink(itemButton:GetBankTabID(), itemButton:GetContainerSlotID())
+		UpdateIcon(itemButton, itemLink)
+	end
+end
+
+-- Update equipment flyout frame (the buttons showing when Alt-hovering a gear slot)
+local function UpdateEquipmentFlyoutFrames(self)
+	for _, iconButton in ipairs(self.buttons) do
+		-- Retrieve the link from the bag slot or inventory slot (depending on item location)
+		local itemLocation = iconButton.location
+		local player, bank, bags, voidStorage, slot, bag, tab, voidSlot = EquipmentManager_UnpackLocation(itemLocation)
+		local itemLink;
+		if bags then
+			-- Item in player/bank bags (must be first as player or bank will also be true)
+			itemLink = C_Container.GetContainerItemLink(bag, slot)
+		elseif player then
+			-- Item on player inventory
+			itemLink = GetInventoryItemLink("player", slot)
+		elseif bank then
+			-- Item in bank
+			local bankItemButton = _G["BankFrameItem" .. (slot - 63)]; -- idk why it's offset by 63 leave me alone
+			itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
+		end
+
+		UpdateIcon(iconButton, itemLink)
+	end
+end
+
+-- EVENTS CALLBACKS
+
+-- Updates all slots on login/reload
+EventRegistry:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, slotIndex, isEmpty)
+	for slotIndex = 1, 17 do
+		UpdateInventory(slotIndex)
+	end	
+end)
+
+-- Update slots when opening the frame
+EventRegistry:RegisterCallback("CharacterFrame.Show", function(_, slotIndex, isEmpty)
+	for slotIndex = 1, 17 do
+		UpdateInventory(slotIndex)
+	end	
+end)
+
+-- Update a slot when gear changes
+EventRegistry:RegisterFrameEventAndCallback("PLAYER_EQUIPMENT_CHANGED", function(_, slotIndex, isEmpty)
+	UpdateInventory(slotIndex)
+end)
+
+-- Update bag slots when opening the bag frame
+EventRegistry:RegisterCallback("ContainerFrame.OpenBag", function()
+	for bagID = 0, 12 do
+		local containerFrame = ContainerFrameUtil_GetShownFrameForID(bagID)
+		if containerFrame then
+			UpdateContainerFrame(containerFrame)
 		end
 	end
-end);
+end)
+
+-- Update bag slots when something changes inside it (moving items around)
+EventRegistry:RegisterFrameEventAndCallback("BAG_UPDATE", function(_, bagIndex)
+	if bagIndex < 13 then
+		UpdateContainerFrame(ContainerFrameUtil_GetShownFrameForID(bagIndex))
+	else
+		UpdateWarbankFrame(AccountBankPanel)
+	end
+end)
+
+-- Update bank slots when bank frame is opened
+EventRegistry:RegisterFrameEventAndCallback("BANKFRAME_OPENED", function()
+	UpdateContainerFrame(BankFrame)
+end)
+
+-- Update bank slots when they change
+EventRegistry:RegisterFrameEventAndCallback("PLAYERBANKSLOTS_CHANGED", function(_, slotIndex)
+	if slotIndex > 28 then return end -- Bags changed, not an item slot
+
+	local bankItemButton = _G["BankFrameItem" .. slotIndex];
+	if bankItemButton then
+		local itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
+		UpdateIcon(bankItemButton, itemLink)
+	end
+end)
+
+-- Update warbank when tab is opened
+AccountBankPanel:HookScript("OnShow", function(self) UpdateWarbankFrame(self) end)
+-- Update warbank when tab is changed
+hooksecurefunc(AccountBankPanel, "SelectTab", function(self) UpdateWarbankFrame(self) end)
+
+-- Update loot frame when opened
+EventRegistry:RegisterFrameEventAndCallback("LOOT_OPENED", function()
+	for slotIndex = 1, GetNumLootItems() do
+		-- Find loot element in the scrollbox
+		local lootElement = LootFrame.ScrollBox:FindFrameByPredicate(function(frame)
+			return frame:GetSlotIndex() == slotIndex
+		end)
+
+		-- Update it
+		if lootElement then
+			local iconButton = lootElement.Item
+			local itemLink = GetLootSlotLink(slotIndex)
+			UpdateIcon(iconButton, itemLink)
+		end
+	end
+end)
+
+-- Update equipment flyout frame when displaying it
+EquipmentFlyoutFrame:HookScript("OnShow", UpdateEquipmentFlyoutFrames)
+-- Update equipment flyout frame when it gets updated (gear changed)
+EquipmentFlyoutFrame:HookScript("OnEvent", UpdateEquipmentFlyoutFrames)
+
+
+-- SavedVariables Defaults
+local defaultsTable = {
+	iconLocation = 1,
+	iconScale = 1,
+};
+
+local function OnAddonLoaded()
+
+	do
+		if IUQI_DB == nil then
+			IUQI_DB = CopyTable(defaultsTable);
+		end
+
+		---------------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------------------------
+
+		local function OnSettingChanged(_, setting, value)
+			local variable = setting:GetVariable()
+
+			if strsub(variable, 1, 3) == "IUQI_" then
+				variable = strsub(variable, 4); -- remove our prefix so it matches existing savedvar keys
+			end
+		end
+
+		local category, layout = Settings.RegisterVerticalLayoutCategory("Item Upgrade Quality Icons")
+		--local subcategory, layout2 = Settings.RegisterVerticalLayoutSubcategory(category, "my very own subcategory")
+
+		local CreateDropdown = Settings.CreateDropdown or Settings.CreateDropDown
+		local CreateCheckbox = Settings.CreateCheckbox or Settings.CreateCheckBox
+
+		local function RegisterSetting(variableKey, defaultValue, name)
+			local uniqueVariable = "IUQI_" .. variableKey; -- these have to be unique or calamity ensues, savedvars will be unaffected
+
+			local setting;
+			setting = Settings.RegisterAddOnSetting(category, uniqueVariable, variableKey, IUQI_DB, type(defaultValue), name, defaultValue);
+
+			setting:SetValue(IUQI_DB[variableKey]);
+			Settings.SetOnValueChangedCallback(uniqueVariable, OnSettingChanged);
+
+			return setting;
+		end
+
+		do
+			local variable = "iconLocation"
+			local defaultValue = 1  -- Corresponds to "Option 1" below.
+			local name = L["iconLocation"]
+			local tooltip = L["iconLocationTT"]
+
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				container:Add(1, L["TOPLEFT"])
+				container:Add(2, L["TOP"])
+				container:Add(3, L["TOPRIGHT"])
+				container:Add(4, L["LEFT"])
+				container:Add(5, L["CENTER"])
+				container:Add(6, L["RIGHT"])
+				container:Add(7, L["BOTTOMLEFT"])
+				container:Add(8, L["BOTTOM"])
+				container:Add(9, L["BOTTOMRIGHT"])
+				container:Add(10, L["NONE"])
+				return container:GetData()
+			end
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateDropdown(category, setting, GetOptions, tooltip)
+		end
+
+		do
+			local variable = "iconScale"
+			local name = L["iconScale"]
+			local tooltip = L["iconScaleTT"]
+			local defaultValue = 1
+			local minValue = .5
+			local maxValue = 1.5
+			local step = .1
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			local options = Settings.CreateSliderOptions(minValue, maxValue, step)
+			options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+			Settings.CreateSlider(category, setting, options, tooltip)
+		end
+
+		Settings.RegisterAddOnCategory(category)
+
+		---------------------------------------------------------------------------------------------------------------------------------
+		---------------------------------------------------------------------------------------------------------------------------------
+	end
+end
+
+EventUtil.ContinueOnAddOnLoaded("ItemUpgradeQualityIcons", OnAddonLoaded);
