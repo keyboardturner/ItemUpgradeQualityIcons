@@ -133,12 +133,47 @@ local inventoryItemSlotsList = {
 	[INVSLOT_OFFHAND] = { slotButton = CharacterSecondaryHandSlot },
 };
 
+local function IconLocation(frame,relativeTo)
+	if not IUQI_DB then
+		frame:SetPoint("TOPLEFT", relativeTo, "TOPLEFT", -3, 2)
+		return
+	end
+
+	if IUQI_DB.iconLocation == 10 then
+		frame:ClearAllPoints();
+		return
+	end
+
+	local positions = {
+		[1] = {"TOPLEFT", relativeTo, "TOPLEFT", -3, 2},
+		[2] = {"TOP", relativeTo, "TOP", 0, 2},
+		[3] = {"TOPRIGHT", relativeTo, "TOPRIGHT", 3, 2},
+		[4] = {"LEFT", relativeTo, "LEFT", -3, 0},
+		[5] = {"CENTER", relativeTo, "CENTER", 0, 0},
+		[6] = {"RIGHT", relativeTo, "RIGHT", 3, 0},
+		[7] = {"BOTTOMLEFT", relativeTo, "BOTTOMLEFT", -3, -2},
+		[8] = {"BOTTOM", relativeTo, "BOTTOM", 0, -2},
+		[9] = {"BOTTOMRIGHT", relativeTo, "BOTTOMRIGHT", 3, -2},
+		[10] = {nil, nil, nil, 0, 0},
+	};
+
+	frame:ClearAllPoints();
+	frame:SetPoint(unpack(positions[IUQI_DB.iconLocation] or positions[1]));
+end
+
+local function IconScale(frame)
+	if not IUQI_DB then return end
+	frame:SetScale(IUQI_DB.iconScale);
+end
+
 local function UpdateIcon(iconButton, itemLink)
 	if not iconButton.IUQI_iconFrame then
 		iconButton.IUQI_iconFrame = iconButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 		iconButton.IUQI_iconFrame:SetPoint("TOPLEFT", iconButton, "TOPLEFT", -3, 2)
 	end
 
+	IconLocation(iconButton.IUQI_iconFrame,iconButton)
+	IconScale(iconButton.IUQI_iconFrame)
 	iconButton.IUQI_iconFrame:SetText("")
 
 	if not itemLink then return end
@@ -320,8 +355,6 @@ local function OnAddonLoaded()
 			if strsub(variable, 1, 3) == "IUQI_" then
 				variable = strsub(variable, 4); -- remove our prefix so it matches existing savedvar keys
 			end
-
-			--DR.setPositions()
 		end
 
 		local category, layout = Settings.RegisterVerticalLayoutCategory("Item Upgrade Quality Icons")
@@ -372,8 +405,8 @@ local function OnAddonLoaded()
 			local name = L["iconScale"]
 			local tooltip = L["iconScaleTT"]
 			local defaultValue = 1
-			local minValue = .4
-			local maxValue = 4
+			local minValue = .5
+			local maxValue = 1.5
 			local step = .1
 
 			local setting = RegisterSetting(variable, defaultValue, name);
