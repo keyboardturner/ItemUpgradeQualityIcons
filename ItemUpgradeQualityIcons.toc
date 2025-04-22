@@ -43,6 +43,7 @@
 ## Category-zhTW: 裝備
 
 ## SavedVariables: IUQI_DB
+## LoadSavedVariablesFirst: 1
 
 Localization.lua
 ItemUpgradeQualityIcons.lua
