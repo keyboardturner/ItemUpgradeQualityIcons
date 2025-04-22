@@ -219,6 +219,13 @@ EventRegistry:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_,
 	end	
 end)
 
+-- Update slots when opening the frame
+EventRegistry:RegisterCallback("CharacterFrame.Show", function(_, slotIndex, isEmpty)
+	for slotIndex = 1, 17 do
+		UpdateInventory(slotIndex)
+	end	
+end)
+
 -- Update a slot when gear changes
 EventRegistry:RegisterFrameEventAndCallback("PLAYER_EQUIPMENT_CHANGED", function(_, slotIndex, isEmpty)
 	UpdateInventory(slotIndex)
