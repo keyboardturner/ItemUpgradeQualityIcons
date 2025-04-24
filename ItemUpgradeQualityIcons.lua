@@ -254,7 +254,17 @@ end
 EventRegistry:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, slotIndex, isEmpty)
 	for slotIndex = 1, 17 do
 		UpdateInventory(slotIndex)
-	end	
+	end
+
+	-- Update bag slots when something changes inside it (moving items around)
+	-- NOTE: Registering it here rather than immediately, as it seems to taint half the UI if triggered too early...
+	EventRegistry:RegisterFrameEventAndCallback("BAG_UPDATE", function(_, bagIndex)
+		if bagIndex < 13 then
+			UpdateContainerFrame(ContainerFrameUtil_GetShownFrameForID(bagIndex))
+		else
+			UpdateWarbankFrame(AccountBankPanel)
+		end
+	end)
 end)
 
 -- Update slots when opening the frame
@@ -276,15 +286,6 @@ EventRegistry:RegisterCallback("ContainerFrame.OpenBag", function()
 		if containerFrame then
 			UpdateContainerFrame(containerFrame)
 		end
-	end
-end)
-
--- Update bag slots when something changes inside it (moving items around)
-EventRegistry:RegisterFrameEventAndCallback("BAG_UPDATE", function(_, bagIndex)
-	if bagIndex < 13 then
-		UpdateContainerFrame(ContainerFrameUtil_GetShownFrameForID(bagIndex))
-	else
-		UpdateWarbankFrame(AccountBankPanel)
 	end
 end)
 
