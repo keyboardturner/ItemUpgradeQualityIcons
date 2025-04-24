@@ -1,3 +1,7 @@
+# 0.3.0
+
+Potential fix to not being able to close talents in combat
+
 # 0.2.9
 
 11.1.5 toc update & addon category
