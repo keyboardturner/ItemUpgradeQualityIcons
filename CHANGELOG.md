@@ -1,3 +1,7 @@
+# 0.3.1
+
+Fix to iconButton not being found error (yeet)
+
 # 0.3.0
 
 Potential fix to not being able to close talents in combat
