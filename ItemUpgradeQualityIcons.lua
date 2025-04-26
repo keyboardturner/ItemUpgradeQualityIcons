@@ -167,6 +167,8 @@ local function IconScale(frame)
 end
 
 local function UpdateIcon(iconButton, itemLink)
+	if not iconButton then return end
+
 	if not iconButton.IUQI_iconFrame then
 		iconButton.IUQI_iconFrame = iconButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 		iconButton.IUQI_iconFrame:SetPoint("TOPLEFT", iconButton, "TOPLEFT", -3, 2)
