@@ -230,8 +230,10 @@ end
 -- Update equipment flyout frame (the buttons showing when Alt-hovering a gear slot)
 local function UpdateEquipmentFlyoutFrames(self)
 	for _, iconButton in ipairs(self.buttons) do
+		if not iconButton or not iconButton.location then return end
 		-- Retrieve the link from the bag slot or inventory slot (depending on item location)
 		local itemLocation = iconButton.location
+		if type(itemLocation) == "table" then return end
 		local player, bank, bags, voidStorage, slot, bag, tab, voidSlot = EquipmentManager_UnpackLocation(itemLocation)
 		local itemLink;
 		if bags then

@@ -1,3 +1,7 @@
+# 0.3.3
+
+Fix to bug where addon explodes at the catalyst thingy
+
 # 0.3.2
 
 11.1.7 toc update
