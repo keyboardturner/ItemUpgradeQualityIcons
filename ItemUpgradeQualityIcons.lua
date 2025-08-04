@@ -216,15 +216,9 @@ local function UpdateContainerFrame(containerFrame)
 	end
 end
 
--- Update a warbank frame
-local function UpdateWarbankFrame(warbankFrame)
-	if not warbankFrame then return end
-
-	-- Of course EnumerateValidItems works differently on the warbank because why not
-	for itemButton in warbankFrame:EnumerateValidItems() do
-		local itemLink = C_Container.GetContainerItemLink(itemButton:GetBankTabID(), itemButton:GetContainerSlotID())
-		UpdateIcon(itemButton, itemLink)
-	end
+local function UpdateBankSlot(itemButton)
+	local itemLink = C_Container.GetContainerItemLink(itemButton:GetBankTabID(), itemButton:GetContainerSlotID())
+	UpdateIcon(itemButton, itemLink)
 end
 
 -- Update equipment flyout frame (the buttons showing when Alt-hovering a gear slot)
@@ -265,8 +259,6 @@ EventRegistry:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_,
 	EventRegistry:RegisterFrameEventAndCallback("BAG_UPDATE", function(_, bagIndex)
 		if bagIndex < 13 then
 			UpdateContainerFrame(ContainerFrameUtil_GetShownFrameForID(bagIndex))
-		else
-			UpdateWarbankFrame(AccountBankPanel)
 		end
 	end)
 end)
@@ -293,26 +285,8 @@ EventRegistry:RegisterCallback("ContainerFrame.OpenBag", function()
 	end
 end)
 
--- Update bank slots when bank frame is opened
-EventRegistry:RegisterFrameEventAndCallback("BANKFRAME_OPENED", function()
-	UpdateContainerFrame(BankFrame)
-end)
-
--- Update bank slots when they change
-EventRegistry:RegisterFrameEventAndCallback("PLAYERBANKSLOTS_CHANGED", function(_, slotIndex)
-	if slotIndex > 28 then return end -- Bags changed, not an item slot
-
-	local bankItemButton = _G["BankFrameItem" .. slotIndex];
-	if bankItemButton then
-		local itemLink = C_Container.GetContainerItemLink(bankItemButton:GetBagID(), bankItemButton:GetID())
-		UpdateIcon(bankItemButton, itemLink)
-	end
-end)
-
--- Update warbank when tab is opened
-AccountBankPanel:HookScript("OnShow", function(self) UpdateWarbankFrame(self) end)
--- Update warbank when tab is changed
-hooksecurefunc(AccountBankPanel, "SelectTab", function(self) UpdateWarbankFrame(self) end)
+-- Update bank slot when it is refreshed
+hooksecurefunc(BankPanelItemButtonMixin, "Refresh", function(self) UpdateBankSlot(self) end)
 
 -- Update loot frame when opened
 EventRegistry:RegisterFrameEventAndCallback("LOOT_OPENED", function()
