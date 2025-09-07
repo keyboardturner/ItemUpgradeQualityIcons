@@ -1,3 +1,7 @@
+# 0.3.5
+
+global variable for addon API added under `IUQI_API`
+
 # 0.3.4
 
 toc update, added support for new character bank slots. While the code for showing old seasonal gear still works, currently old season gear appears to have its data wiped and might be deprecated in the future.

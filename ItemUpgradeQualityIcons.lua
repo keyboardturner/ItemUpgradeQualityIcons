@@ -402,3 +402,37 @@ local function OnAddonLoaded()
 end
 
 EventUtil.ContinueOnAddOnLoaded("ItemUpgradeQualityIcons", OnAddonLoaded);
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+
+IUQI_API = {
+	categoryEnum = categoryEnum,
+	categoryData = categoryDataTab, -- mostly no longer needed, blizz provides proper APIs
+	GetIcon = getIcon,
+	UpdateIcon = UpdateIcon,
+	UpdateInventory = UpdateInventory,
+	UpdateContainerFrame = UpdateContainerFrame,
+	UpdateBankSlot = UpdateBankSlot,
+	UpdateEquipmentFlyoutFrames = UpdateEquipmentFlyoutFrames,
+
+	-- utility for addons to refresh everything
+	RefreshAll = function()
+		-- refresh inventory
+		for slotIndex = 1, 17 do
+			UpdateInventory(slotIndex);
+		end
+		-- refresh bags
+		for bagID = 0, 12 do
+			local containerFrame = ContainerFrameUtil_GetShownFrameForID(bagID);
+			if containerFrame then
+				UpdateContainerFrame(containerFrame);
+			end
+		end
+		-- refresh equipment flyout if shown
+		if EquipmentFlyoutFrame:IsShown() then
+			UpdateEquipmentFlyoutFrames(EquipmentFlyoutFrame);
+		end
+	end,
+};
