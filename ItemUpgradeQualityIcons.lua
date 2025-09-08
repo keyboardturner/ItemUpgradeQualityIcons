@@ -144,16 +144,26 @@ local function IconLocation(frame,relativeTo)
 		return
 	end
 
+	local XVar = 1
+	local YVar = 1
+
+	if IUQI_DB.iconOffsetX then
+		XVar = IUQI_DB.iconOffsetX
+	end
+	if IUQI_DB.iconOffsetY then
+		YVar = IUQI_DB.iconOffsetY
+	end
+
 	local positions = {
-		[1] = {"TOPLEFT", relativeTo, "TOPLEFT", -3, 2},
-		[2] = {"TOP", relativeTo, "TOP", 0, 2},
-		[3] = {"TOPRIGHT", relativeTo, "TOPRIGHT", 3, 2},
-		[4] = {"LEFT", relativeTo, "LEFT", -3, 0},
-		[5] = {"CENTER", relativeTo, "CENTER", 0, 0},
-		[6] = {"RIGHT", relativeTo, "RIGHT", 3, 0},
-		[7] = {"BOTTOMLEFT", relativeTo, "BOTTOMLEFT", -3, -2},
-		[8] = {"BOTTOM", relativeTo, "BOTTOM", 0, -2},
-		[9] = {"BOTTOMRIGHT", relativeTo, "BOTTOMRIGHT", 3, -2},
+		[1] = {"TOPLEFT", relativeTo, "TOPLEFT", -3*XVar, 2*YVar},
+		[2] = {"TOP", relativeTo, "TOP", 0*XVar, 2*YVar},
+		[3] = {"TOPRIGHT", relativeTo, "TOPRIGHT", 3*XVar, 2*YVar},
+		[4] = {"LEFT", relativeTo, "LEFT", -3*XVar, 0*YVar},
+		[5] = {"CENTER", relativeTo, "CENTER", 0*XVar, 0*YVar},
+		[6] = {"RIGHT", relativeTo, "RIGHT", 3*XVar, 0*YVar},
+		[7] = {"BOTTOMLEFT", relativeTo, "BOTTOMLEFT", -3*XVar, -2*YVar},
+		[8] = {"BOTTOM", relativeTo, "BOTTOM", 0*XVar, -2*YVar},
+		[9] = {"BOTTOMRIGHT", relativeTo, "BOTTOMRIGHT", 3*XVar, -2*YVar},
 		[10] = {nil, nil, nil, 0, 0},
 	};
 
@@ -170,8 +180,19 @@ local function UpdateIcon(iconButton, itemLink)
 	if not iconButton then return end
 
 	if not iconButton.IUQI_iconFrame then
+		local XVar = 1
+		local YVar = 1
+
+		if IUQI_DB.iconOffsetX then
+			XVar = IUQI_DB.iconOffsetX
+		end
+		if IUQI_DB.iconOffsetY then
+			YVar = IUQI_DB.iconOffsetY
+		end
+
 		iconButton.IUQI_iconFrame = iconButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-		iconButton.IUQI_iconFrame:SetPoint("TOPLEFT", iconButton, "TOPLEFT", -3, 2)
+		iconButton.IUQI_iconFrame:SetPoint("TOPLEFT", iconButton, "TOPLEFT", -3*XVar, 2*YVar)
+		print("update pos", XVar, YVar)
 	end
 
 	IconLocation(iconButton.IUQI_iconFrame,iconButton)
@@ -315,6 +336,8 @@ EquipmentFlyoutFrame:HookScript("OnEvent", UpdateEquipmentFlyoutFrames)
 local defaultsTable = {
 	iconLocation = 1,
 	iconScale = 1,
+	iconOffsetX = 1,
+	iconOffsetY = 1,
 };
 
 local function OnAddonLoaded()
@@ -387,6 +410,36 @@ local function OnAddonLoaded()
 			local minValue = .5
 			local maxValue = 1.5
 			local step = .1
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			local options = Settings.CreateSliderOptions(minValue, maxValue, step)
+			options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+			Settings.CreateSlider(category, setting, options, tooltip)
+		end
+
+		do
+			local variable = "iconOffsetX"
+			local name = L["iconOffsetX"]
+			local tooltip = L["iconOffsetXTT"]
+			local defaultValue = 1
+			local minValue = -10
+			local maxValue = 10
+			local step = 1
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			local options = Settings.CreateSliderOptions(minValue, maxValue, step)
+			options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+			Settings.CreateSlider(category, setting, options, tooltip)
+		end
+
+		do
+			local variable = "iconOffsetY"
+			local name = L["iconOffsetY"]
+			local tooltip = L["iconOffsetYTT"]
+			local defaultValue = 1
+			local minValue = -10
+			local maxValue = 10
+			local step = 1
 
 			local setting = RegisterSetting(variable, defaultValue, name);
 			local options = Settings.CreateSliderOptions(minValue, maxValue, step)
