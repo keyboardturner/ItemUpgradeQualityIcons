@@ -192,7 +192,6 @@ local function UpdateIcon(iconButton, itemLink)
 
 		iconButton.IUQI_iconFrame = iconButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
 		iconButton.IUQI_iconFrame:SetPoint("TOPLEFT", iconButton, "TOPLEFT", -3*XVar, 2*YVar)
-		print("update pos", XVar, YVar)
 	end
 
 	IconLocation(iconButton.IUQI_iconFrame,iconButton)
