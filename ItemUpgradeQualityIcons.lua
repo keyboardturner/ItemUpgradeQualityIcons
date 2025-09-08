@@ -446,6 +446,131 @@ local function OnAddonLoaded()
 			Settings.CreateSlider(category, setting, options, tooltip)
 		end
 
+
+
+		local CreateDropdown = Settings.CreateDropdown or Settings.CreateDropDown
+		local CreateCheckbox = Settings.CreateCheckbox or Settings.CreateCheckBox
+
+		do
+			local variable = "explorerTheme"
+			local defaultValue = 1  -- Corresponds to "Option 1" below.
+			local name = L["explorerTheme"]
+			local tooltip = L["explorerThemeTT"]
+
+			local icon = getIcon(categoryDataTab[categoryEnum.Explorer], true, 20)
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				container:Add(1, icon..L["Default"])
+				container:Add(2, "OtherAddonStyle1")
+				container:Add(3, "OtherAddonStyle2")
+				container:Add(4, "etc") -- probably need something to dynamically add icons here
+				return container:GetData()
+			end
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateDropdown(category, setting, GetOptions, tooltip)
+		end
+
+		do
+			local variable = "adventurerTheme"
+			local defaultValue = 1  -- Corresponds to "Option 1" below.
+			local name = L["adventurerTheme"]
+			local tooltip = L["adventurerThemeTT"]
+
+			local icon = getIcon(categoryDataTab[categoryEnum.Adventurer], true, 20)
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				container:Add(1, icon..L["Default"])
+				container:Add(2, "OtherAddonStyle1")
+				container:Add(3, "OtherAddonStyle2")
+				container:Add(4, "etc")
+				return container:GetData()
+			end
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateDropdown(category, setting, GetOptions, tooltip)
+		end
+
+		do
+			local variable = "veteranTheme"
+			local defaultValue = 1  -- Corresponds to "Option 1" below.
+			local name = L["veteranTheme"]
+			local tooltip = L["veteranThemeTT"]
+
+			local icon = getIcon(categoryDataTab[categoryEnum.Veteran], true, 20)
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				container:Add(1, icon..L["Default"])
+				container:Add(2, "OtherAddonStyle1")
+				container:Add(3, "OtherAddonStyle2")
+				container:Add(4, "etc")
+				return container:GetData()
+			end
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateDropdown(category, setting, GetOptions, tooltip)
+		end
+
+		do
+			local variable = "championTheme"
+			local defaultValue = 1  -- Corresponds to "Option 1" below.
+			local name = L["championTheme"]
+			local tooltip = L["championThemeTT"]
+
+			local icon = getIcon(categoryDataTab[categoryEnum.Champion], true, 20)
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				container:Add(1, icon..L["Default"])
+				container:Add(2, "OtherAddonStyle1")
+				container:Add(3, "OtherAddonStyle2")
+				container:Add(4, "etc")
+				return container:GetData()
+			end
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateDropdown(category, setting, GetOptions, tooltip)
+		end
+
+		do
+			local variable = "heroTheme"
+			local defaultValue = 1  -- Corresponds to "Option 1" below.
+			local name = L["heroTheme"]
+			local tooltip = L["heroThemeTT"]
+
+			local icon = getIcon(categoryDataTab[categoryEnum.Hero], true, 20)
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				container:Add(1, icon..L["Default"])
+				container:Add(2, "OtherAddonStyle1")
+				container:Add(3, "OtherAddonStyle2")
+				container:Add(4, "etc")
+				return container:GetData()
+			end
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateDropdown(category, setting, GetOptions, tooltip)
+		end
+
+		do
+			local variable = "mythTheme"
+			local defaultValue = 1  -- Corresponds to "Option 1" below.
+			local name = L["mythTheme"]
+			local tooltip = L["mythThemeTT"]
+
+			local icon = getIcon(categoryDataTab[categoryEnum.Myth], true, 20)
+			local function GetOptions()
+				local container = Settings.CreateControlTextContainer()
+				container:Add(1, icon..L["Default"])
+				container:Add(2, "OtherAddonStyle1")
+				container:Add(3, "OtherAddonStyle2")
+				container:Add(4, "etc")
+				return container:GetData()
+			end
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateDropdown(category, setting, GetOptions, tooltip)
+		end
+
 		Settings.RegisterAddOnCategory(category)
 
 		---------------------------------------------------------------------------------------------------------------------------------
