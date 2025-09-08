@@ -32,6 +32,7 @@ if LOCALE == "enUS" then
 	L["iconOffsetXTT"] = "Move the icons left or right from default position"
 	L["iconOffsetY"] = "Vertical Offset"
 	L["iconOffsetYTT"] = "Move the icons up or down from default position"
+	L["Default"] = DEFAULT
 
 return end
 
@@ -55,6 +56,7 @@ if LOCALE == "esES" or LOCALE == "esMX" then
 	L["iconOffsetXTT"] = "Mueve los iconos a la izquierda o derecha desde la posición predeterminada"
 	L["iconOffsetY"] = "Desplazamiento vertical"
 	L["iconOffsetYTT"] = "Mueve los iconos hacia arriba o abajo desde la posición predeterminada"
+	L["Default"] = DEFAULT
 
 return end
 
@@ -78,6 +80,7 @@ if LOCALE == "deDE" then
 	L["iconOffsetXTT"] = "Verschiebt die Symbole nach links oder rechts von der Standardposition"
 	L["iconOffsetY"] = "Vertikaler Versatz"
 	L["iconOffsetYTT"] = "Verschiebt die Symbole nach oben oder unten von der Standardposition"
+	L["Default"] = DEFAULT
 
 return end
 
@@ -101,6 +104,7 @@ if LOCALE == "frFR" then
 	L["iconOffsetXTT"] = "Déplace les icônes vers la gauche ou la droite depuis la position par défaut"
 	L["iconOffsetY"] = "Décalage vertical"
 	L["iconOffsetYTT"] = "Déplace les icônes vers le haut ou le bas depuis la position par défaut"
+	L["Default"] = DEFAULT
 
 return end
 
@@ -124,6 +128,7 @@ if LOCALE == "itIT" then
 	L["iconOffsetXTT"] = "Sposta le icone a sinistra o a destra dalla posizione predefinita"
 	L["iconOffsetY"] = "Scostamento verticale"
 	L["iconOffsetYTT"] = "Sposta le icone verso l’alto o il basso dalla posizione predefinita"
+	L["Default"] = DEFAULT
 
 return end
 
@@ -147,6 +152,7 @@ if LOCALE == "ptBR" then
 	L["iconOffsetXTT"] = "Move os ícones para a esquerda ou direita da posição padrão"
 	L["iconOffsetY"] = "Deslocamento vertical"
 	L["iconOffsetYTT"] = "Move os ícones para cima ou para baixo da posição padrão"
+	L["Default"] = DEFAULT
 
 -- Note that the EU Portuguese WoW client also
 -- uses the Brazilian Portuguese locale code.
@@ -172,6 +178,7 @@ if LOCALE == "ruRU" then
 	L["iconOffsetXTT"] = "Перемещает значки влево или вправо от позиции по умолчанию"
 	L["iconOffsetY"] = "Вертикальное смещение"
 	L["iconOffsetYTT"] = "Перемещает значки вверх или вниз от позиции по умолчанию"
+	L["Default"] = DEFAULT
 
 return end
 
@@ -195,6 +202,7 @@ if LOCALE == "koKR" then
 	L["iconOffsetXTT"] = "아이콘을 기본 위치에서 좌우로 이동합니다"
 	L["iconOffsetY"] = "세로 이동"
 	L["iconOffsetYTT"] = "아이콘을 기본 위치에서 위아래로 이동합니다"
+	L["Default"] = DEFAULT
 
 return end
 
@@ -218,6 +226,7 @@ if LOCALE == "zhCN" then
 	L["iconOffsetXTT"] = "将图标从默认位置向左或向右移动"
 	L["iconOffsetY"] = "垂直偏移"
 	L["iconOffsetYTT"] = "将图标从默认位置向上或向下移动"
+	L["Default"] = DEFAULT
 
 return end
 
@@ -241,5 +250,6 @@ if LOCALE == "zhTW" then
 	L["iconOffsetXTT"] = "將圖示從預設位置向左或向右移動"
 	L["iconOffsetY"] = "垂直偏移"
 	L["iconOffsetYTT"] = "將圖示從預設位置向上或向下移動"
+	L["Default"] = DEFAULT
 
 return end
