@@ -37,6 +37,11 @@ local categoryDataTab = {
 	[categoryEnum.Awakened] = {minLevel = 493, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a "}, -- update later maybe, for now this is OLD
 }
 
+local function setIcon(trackID, iconString)
+	if not categoryDataTab[trackID] then return end
+	categoryDataTab[trackID].icon = iconString;
+end
+
 local function getIcon(categoryData, isCurrentSeason, size)
 	local iconString;
 	if isCurrentSeason then
@@ -176,28 +181,14 @@ local function IconScale(frame)
 	frame:SetScale(IUQI_DB.iconScale);
 end
 
-local function UpdateIcon(iconButton, itemLink)
-	if not iconButton then return end
+local function GetIconForTrack(trackID, iconSize)
+	local categoryData = categoryDataTab[trackID]
+	if not categoryData then return end -- Invalid/non-existent category
 
-	if not iconButton.IUQI_iconFrame then
-		local XVar = 1
-		local YVar = 1
+	return getIcon(categoryData, true, iconSize);
+end
 
-		if IUQI_DB.iconOffsetX then
-			XVar = IUQI_DB.iconOffsetX
-		end
-		if IUQI_DB.iconOffsetY then
-			YVar = IUQI_DB.iconOffsetY
-		end
-
-		iconButton.IUQI_iconFrame = iconButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-		iconButton.IUQI_iconFrame:SetPoint("TOPLEFT", iconButton, "TOPLEFT", -3*XVar, 2*YVar)
-	end
-
-	IconLocation(iconButton.IUQI_iconFrame,iconButton)
-	IconScale(iconButton.IUQI_iconFrame)
-	iconButton.IUQI_iconFrame:SetText("")
-
+local function GetIconForLink(itemLink, iconSize)
 	if not itemLink then return end
 
 	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
@@ -212,7 +203,26 @@ local function UpdateIcon(iconButton, itemLink)
 		isCurrentSeason = true
 	end
 
-	iconButton.IUQI_iconFrame:SetText(getIcon(categoryDataTab[itemUpgradeData.trackStringID], isCurrentSeason, 18))
+	return getIcon(categoryData, isCurrentSeason, iconSize);
+end
+
+local function UpdateIcon(iconButton, itemLink)
+	if not iconButton then return end
+
+	if not iconButton.IUQI_iconFrame then
+		iconButton.IUQI_iconFrame = iconButton:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+	end
+
+	IconLocation(iconButton.IUQI_iconFrame,iconButton)
+	IconScale(iconButton.IUQI_iconFrame)
+
+	local iconString = GetIconForLink(itemLink, 18)
+
+	if iconString then
+		iconButton.IUQI_iconFrame:SetText(iconString)
+	else
+		iconButton.IUQI_iconFrame:SetText("")
+	end
 end
 
 -- CONTAINERS
@@ -585,29 +595,38 @@ EventUtil.ContinueOnAddOnLoaded("ItemUpgradeQualityIcons", OnAddonLoaded);
 ---------------------------------------------------------------------------------------------------------------------------------
 
 IUQI_API = {
-	categoryEnum = categoryEnum,
-	categoryData = categoryDataTab, -- mostly no longer needed, blizz provides proper APIs
-	GetIcon = getIcon,
+	-- Enum for easy access to item track ID
+	categoryEnum = CopyTable(categoryEnum),
+
+	-- Function to attach the quality icon to a given button based on the item link content
 	UpdateIcon = UpdateIcon,
+
+	-- Individual functions to retrieve the quality icon text and apply icon location and scale to a frame if UpdateIcon doesn't suit the needs
+	GetIconForLink = GetIconForLink,
+	GetIconForTrack = GetIconForTrack,
+	IconLocation = IconLocation,
+	IconScale = IconScale,
+
+	-- Refresh functions
 	UpdateInventory = UpdateInventory,
 	UpdateContainerFrame = UpdateContainerFrame,
 	UpdateBankSlot = UpdateBankSlot,
 	UpdateEquipmentFlyoutFrames = UpdateEquipmentFlyoutFrames,
 
-	-- utility for addons to refresh everything
+	-- Utility for addons to refresh everything
 	RefreshAll = function()
-		-- refresh inventory
+		-- Refresh inventory
 		for slotIndex = 1, 17 do
 			UpdateInventory(slotIndex);
 		end
-		-- refresh bags
+		-- Refresh bags
 		for bagID = 0, 12 do
 			local containerFrame = ContainerFrameUtil_GetShownFrameForID(bagID);
 			if containerFrame then
 				UpdateContainerFrame(containerFrame);
 			end
 		end
-		-- refresh equipment flyout if shown
+		-- Refresh equipment flyout if shown
 		if EquipmentFlyoutFrame:IsShown() then
 			UpdateEquipmentFlyoutFrames(EquipmentFlyoutFrame);
 		end
