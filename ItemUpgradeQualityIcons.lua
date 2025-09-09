@@ -37,11 +37,6 @@ local categoryDataTab = {
 	[categoryEnum.Awakened] = {minLevel = 493, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a "}, -- update later maybe, for now this is OLD
 }
 
-local function setIcon(trackID, iconString)
-	if not categoryDataTab[trackID] then return end
-	categoryDataTab[trackID].icon = iconString;
-end
-
 local function getIcon(categoryData, isCurrentSeason, size)
 	local iconString;
 	if isCurrentSeason then
