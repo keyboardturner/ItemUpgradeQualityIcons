@@ -459,8 +459,8 @@ local function OnAddonLoaded()
 		do
 			local variable = "explorerTheme"
 			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["explorerTheme"]
-			local tooltip = L["explorerThemeTT"]
+			local name = string.format(L["IconTheme"], L["Explorer"])
+			local tooltip = string.format(L["IconThemeTT"], L["Explorer"])
 
 			local icon = getIcon(categoryDataTab[categoryEnum.Explorer], true, 20)
 			local function GetOptions()
@@ -479,8 +479,8 @@ local function OnAddonLoaded()
 		do
 			local variable = "adventurerTheme"
 			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["adventurerTheme"]
-			local tooltip = L["adventurerThemeTT"]
+			local name = string.format(L["IconTheme"], L["Adventurer"])
+			local tooltip = string.format(L["IconThemeTT"], L["Adventurer"])
 
 			local icon = getIcon(categoryDataTab[categoryEnum.Adventurer], true, 20)
 			local function GetOptions()
@@ -499,8 +499,8 @@ local function OnAddonLoaded()
 		do
 			local variable = "veteranTheme"
 			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["veteranTheme"]
-			local tooltip = L["veteranThemeTT"]
+			local name = string.format(L["IconTheme"], L["Veteran"])
+			local tooltip = string.format(L["IconThemeTT"], L["Veteran"])
 
 			local icon = getIcon(categoryDataTab[categoryEnum.Veteran], true, 20)
 			local function GetOptions()
@@ -519,8 +519,8 @@ local function OnAddonLoaded()
 		do
 			local variable = "championTheme"
 			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["championTheme"]
-			local tooltip = L["championThemeTT"]
+			local name = string.format(L["IconTheme"], L["Champion"])
+			local tooltip = string.format(L["IconThemeTT"], L["Champion"])
 
 			local icon = getIcon(categoryDataTab[categoryEnum.Champion], true, 20)
 			local function GetOptions()
@@ -539,8 +539,8 @@ local function OnAddonLoaded()
 		do
 			local variable = "heroTheme"
 			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["heroTheme"]
-			local tooltip = L["heroThemeTT"]
+			local name = string.format(L["IconTheme"], L["Hero"])
+			local tooltip = string.format(L["IconThemeTT"], L["Hero"])
 
 			local icon = getIcon(categoryDataTab[categoryEnum.Hero], true, 20)
 			local function GetOptions()
@@ -559,8 +559,8 @@ local function OnAddonLoaded()
 		do
 			local variable = "mythTheme"
 			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["mythTheme"]
-			local tooltip = L["mythThemeTT"]
+			local name = string.format(L["IconTheme"], L["Myth"])
+			local tooltip = string.format(L["IconThemeTT"], L["Myth"])
 
 			local icon = getIcon(categoryDataTab[categoryEnum.Myth], true, 20)
 			local function GetOptions()
