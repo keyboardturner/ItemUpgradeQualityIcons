@@ -510,7 +510,8 @@ end
 
 EventUtil.ContinueOnAddOnLoaded("ItemUpgradeQualityIcons", OnAddonLoaded);
 
--- DEBUG OPTIONS, JUST AN EXAMPLE
+--[[
+--DEBUG OPTIONS, JUST AN EXAMPLE
 RegisterThemeIcon(categoryEnum.Explorer, "Reverse", "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
 RegisterThemeIcon(categoryEnum.Adventurer, "Reverse", "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
 RegisterThemeIcon(categoryEnum.Veteran, "Reverse", "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
@@ -518,6 +519,43 @@ RegisterThemeIcon(categoryEnum.Champion, "Reverse", "|A:Professions-ChatIcon-Qua
 RegisterThemeIcon(categoryEnum.Hero, "Reverse", "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
 RegisterThemeIcon(categoryEnum.Myth, "Reverse", "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
 -- DEBUG OPTIONS, JUST AN EXAMPLE
+--]]
+
+RegisterThemeIcon(categoryEnum.Explorer, L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+RegisterThemeIcon(categoryEnum.Explorer, L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Explorer, L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Explorer, L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Explorer, L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+
+RegisterThemeIcon(categoryEnum.Adventurer,  L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+RegisterThemeIcon(categoryEnum.Adventurer,  L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Adventurer,  L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Adventurer,  L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Adventurer,  L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+
+RegisterThemeIcon(categoryEnum.Veteran,  L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+RegisterThemeIcon(categoryEnum.Veteran,  L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Veteran,  L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Veteran,  L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Veteran,  L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+
+RegisterThemeIcon(categoryEnum.Champion,  L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+RegisterThemeIcon(categoryEnum.Champion,  L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Champion,  L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Champion,  L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Champion,  L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+
+RegisterThemeIcon(categoryEnum.Hero,  L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+RegisterThemeIcon(categoryEnum.Hero,  L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Hero,  L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Hero,  L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Hero,  L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+
+RegisterThemeIcon(categoryEnum.Myth,  L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Myth,  L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Myth,  L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Myth,  L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Myth,  L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
 
 ---------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------
