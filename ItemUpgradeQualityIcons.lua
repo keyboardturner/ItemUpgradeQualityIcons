@@ -483,9 +483,24 @@ local function OnAddonLoaded()
 			local icon = GetIconForTrack(trackID, 20)
 			local function GetOptions()
 				local container = Settings.CreateControlTextContainer()
-				for name, iconString in pairs(categoryIconThemes[trackID]) do
+				
+				local themeKeys = {}
+				for name in pairs(categoryIconThemes[trackID]) do
+					table.insert(themeKeys, name)
+				end
+
+				-- keep the Default option to the top
+				table.sort(themeKeys, function(a, b)
+					if a == "Default" then return true end
+					if b == "Default" then return false end
+					return a < b
+				end)
+
+				for _, name in ipairs(themeKeys) do
+					local iconString = categoryIconThemes[trackID][name]
 					container:Add(name, iconString .. " " .. L[name])
 				end
+
 				return container:GetData()
 			end
 
