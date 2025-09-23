@@ -16,5 +16,26 @@
 <h4>BUG REPORTING</h4>
 <p>If you want to report an issue, <span style="text-decoration: underline;">please state the language you're playing in</span> and/or if any particular <span style="text-decoration: underline;">additional addons causing issues</span>.</p>
 
+<h4>API and Custom Icons</h4>
+<p>API functions available can be found in the global variable `IUQI_API` along with several functions for useage with other addons.</p>
+<p>Adding custom icons can also be done via an addon:</p>
+<p>Example usage:</p>
+
+`IUQI_API.RegisterThemeIcon(IUQI_API.categoryEnum.Explorer, "MyThemeKey", "MyThemeName", "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");`
+
+<p>Theme name can be localized (as it appears on the dropdown) but key is used for identifying current selected theme and SHOULD remain locale-agnostic</p>
+<p>Size MUST be %d in the texture/atlas string for formatting</p>
+
+<p>Full addon example:</p>
+
+```
+local function OnAddonLoaded()
+	if IUQI_API then
+		IUQI_API.RegisterThemeIcon(IUQI_API.categoryEnum.Explorer, "MyThemeKey", "MyThemeName", "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+	end
+end
+
+EventUtil.ContinueOnAddOnLoaded("ItemUpgradeQualityIcons", OnAddonLoaded);
+```
 
 A link to my discord for addon projects and other things can be found [here](https://discord.gg/tA4rrmjPp8).
