@@ -533,17 +533,6 @@ end
 
 EventUtil.ContinueOnAddOnLoaded("ItemUpgradeQualityIcons", OnAddonLoaded);
 
---[[
---DEBUG OPTIONS, JUST AN EXAMPLE
-RegisterThemeIcon(categoryEnum.Explorer, "Reverse", "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
-RegisterThemeIcon(categoryEnum.Adventurer, "Reverse", "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
-RegisterThemeIcon(categoryEnum.Veteran, "Reverse", "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
-RegisterThemeIcon(categoryEnum.Champion, "Reverse", "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
-RegisterThemeIcon(categoryEnum.Hero, "Reverse", "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
-RegisterThemeIcon(categoryEnum.Myth, "Reverse", "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
--- DEBUG OPTIONS, JUST AN EXAMPLE
---]]
-
 RegisterThemeIcon(categoryEnum.Explorer, "Adventurer", L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
 RegisterThemeIcon(categoryEnum.Explorer, "Veteran", L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
 RegisterThemeIcon(categoryEnum.Explorer, "Champion", L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
