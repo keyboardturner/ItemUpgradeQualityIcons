@@ -28,26 +28,63 @@ local categoryEnum = {
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {minLevel = 642, color = ITEM_POOR_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:31:73:107|t "},
-	[categoryEnum.Adventurer] = {minLevel = 655, color = WHITE_FONT_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:47:1:35|t "},
-	[categoryEnum.Veteran] = {minLevel = 668, color = UNCOMMON_GREEN_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:49:85:1:35|t "},
-	[categoryEnum.Champion] = {minLevel = 681, color = RARE_BLUE_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:87:121:1:35|t "},
-	[categoryEnum.Hero] = {minLevel = 694, color = ITEM_EPIC_COLOR, icon = "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons.tga:%d:%d:0:0:128:128:1:35:37:71|t "},
-	[categoryEnum.Myth] = {minLevel = 707, color = ITEM_LEGENDARY_COLOR, icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t ", iconObsolete = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:42:78:42:78|t "}, -- Thanks to Peterodox for supplying this new texture!
-	[categoryEnum.Awakened] = {minLevel = 493, color = ITEM_LEGENDARY_COLOR, icon = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a ", iconObsolete = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a "}, -- update later maybe, for now this is OLD
+	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 642, color = ITEM_POOR_COLOR},
+	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = 655, color = WHITE_FONT_COLOR},
+	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = 668, color = UNCOMMON_GREEN_COLOR},
+	[categoryEnum.Champion] = {englishName = "Champion", minLevel = 681, color = RARE_BLUE_COLOR},
+	[categoryEnum.Hero] = {englishName = "Hero", minLevel = 694, color = ITEM_EPIC_COLOR},
+	[categoryEnum.Myth] = {englishName = "Myth", minLevel = 707, color = ITEM_LEGENDARY_COLOR},
+	[categoryEnum.Awakened] = {englishName = "Awakened", minLevel = 493, color = ITEM_LEGENDARY_COLOR}, -- update later maybe, for now this is OLD
 }
 
-local function getIcon(categoryData, isCurrentSeason, size)
-	local iconString;
-	if isCurrentSeason then
-		-- Current season
-		iconString = categoryData.icon
-	else
-		-- Previous season
-		iconString = categoryData.iconObsolete
-	end
+local categoryThemesCount = {
+	[categoryEnum.Explorer] = 1,
+	[categoryEnum.Adventurer] = 1,
+	[categoryEnum.Veteran] = 1,
+	[categoryEnum.Champion] = 1,
+	[categoryEnum.Hero] = 1,
+	[categoryEnum.Myth] = 1,
+	[categoryEnum.Awakened] = 1,
+}
+
+local categoryIconThemes = {
+	[categoryEnum.Explorer] = {
+		["Default"] = {index = 1, name = L["Default"], icon = "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a"},
+	},
+	[categoryEnum.Adventurer] = {
+		["Default"] = {index = 1, name = L["Default"], icon = "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a"},
+	},
+	[categoryEnum.Veteran] = {
+		["Default"] = {index = 1, name = L["Default"], icon = "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a"},
+	},
+	[categoryEnum.Champion] = {
+		["Default"] = {index = 1, name = L["Default"], icon = "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a"},
+	},
+	[categoryEnum.Hero] = {
+		["Default"] = {index = 1, name = L["Default"], icon = "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a"},
+	},
+	[categoryEnum.Myth] = {
+		["Default"] = {index = 1, name = L["Default"], icon = "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t"}, -- Thanks to Peterodox for supplying this new texture!
+	},
+	[categoryEnum.Awakened] = {
+		["Default"] = {index = 1, name = L["Default"], icon = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a"}
+	},
+}
+
+local function GetIconForTrack(trackID, size)
+	local iconTheme = IUQI_DB[categoryDataTab[trackID].englishName .. "Theme"];
+	local iconString = (iconTheme and categoryIconThemes[trackID][iconTheme] or categoryIconThemes[trackID]["Default"]).icon;
 
 	return iconString:format(size, size)
+end
+
+local function GetIconForLink(itemLink, iconSize)
+	if not itemLink then return end
+
+	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
+	if not itemUpgradeData or not itemUpgradeData.trackStringID then return end
+
+	return GetIconForTrack(itemUpgradeData.trackStringID, iconSize);
 end
 
 -- TOOLTIP ICON
@@ -61,8 +98,6 @@ local function SearchAndReplaceTooltipLine(tooltip)
 
 	local categoryData = categoryDataTab[itemUpgradeData.trackStringID]
 	if not categoryData then return end -- Invalid/non-existent category
-
-	local isCurrentSeason;
 
 	-- Editing the ilvl line
 	for i = 1, tooltip:NumLines() do
@@ -78,9 +113,6 @@ local function SearchAndReplaceTooltipLine(tooltip)
 			if ilvl then
 				-- Checking if the ilvl is in the right range (otherwise it's a previous season item)
 				if ilvl >= categoryData.minLevel then
-
-					isCurrentSeason = true;
-
 					-- Not showing ilvl range on a max upgraded item
 					local itemMaxLevel = itemUpgradeData.maxItemLevel
 
@@ -93,7 +125,7 @@ local function SearchAndReplaceTooltipLine(tooltip)
 				end
 			elseif text:match(patternUpgradeLevel) then
 				-- Ilvl line is always above the upgrade line, so this order works
-				text = text:gsub(patternUpgradeLevel, "%1" .. getIcon(categoryData, isCurrentSeason, 20) .. "%2%3")
+				text = text:gsub(patternUpgradeLevel, "%1" .. GetIconForTrack(itemUpgradeData.trackStringID, 20) .. " %2%3")
 
 				line:SetText(text)
 				line:Show()
@@ -174,31 +206,6 @@ end
 local function IconScale(frame)
 	if not IUQI_DB then return end
 	frame:SetScale(IUQI_DB.iconScale);
-end
-
-local function GetIconForTrack(trackID, iconSize)
-	local categoryData = categoryDataTab[trackID]
-	if not categoryData then return end -- Invalid/non-existent category
-
-	return getIcon(categoryData, true, iconSize);
-end
-
-local function GetIconForLink(itemLink, iconSize)
-	if not itemLink then return end
-
-	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
-	if not itemUpgradeData then return end
-
-	local categoryData = categoryDataTab[itemUpgradeData.trackStringID]
-	if not categoryData then return end -- Invalid/non-existent category
-
-	local isCurrentSeason
-	local _, _, _, ilvl = C_Item.GetItemInfo(itemLink)
-	if ilvl >= categoryData.minLevel then
-		isCurrentSeason = true
-	end
-
-	return getIcon(categoryData, isCurrentSeason, iconSize);
 end
 
 local function UpdateIcon(iconButton, itemLink)
@@ -344,6 +351,32 @@ local defaultsTable = {
 	iconOffsetY = 1,
 };
 
+local function RegisterThemeIcon(trackID, themeKey, themeName, trackIcon)
+	assert(themeKey ~= nil and strtrim(themeKey) ~= "", "Theme key can't be nil")
+	assert(themeName ~= nil and strtrim(themeName) ~= "", "Theme name can't be nil")
+	assert(categoryIconThemes[trackID][themeKey] == nil, "Theme key already exists for " .. categoryDataTab[trackID].englishName)
+	categoryThemesCount[trackID] = categoryThemesCount[trackID] + 1;
+	categoryIconThemes[trackID][themeKey] = {index = categoryThemesCount[trackID], name = themeName, icon = trackIcon}
+end
+
+local function RefreshAll()
+	-- Refresh inventory
+	for slotIndex = 1, 17 do
+		UpdateInventory(slotIndex);
+	end
+	-- Refresh bags
+	for bagID = 0, 12 do
+		local containerFrame = ContainerFrameUtil_GetShownFrameForID(bagID);
+		if containerFrame then
+			UpdateContainerFrame(containerFrame);
+		end
+	end
+	-- Refresh equipment flyout if shown
+	if EquipmentFlyoutFrame:IsShown() then
+		UpdateEquipmentFlyoutFrames(EquipmentFlyoutFrame);
+	end
+end
+
 local function OnAddonLoaded()
 
 	do
@@ -376,7 +409,7 @@ local function OnAddonLoaded()
 			setting = Settings.RegisterAddOnSetting(category, uniqueVariable, variableKey, IUQI_DB, type(defaultValue), name, defaultValue);
 
 			setting:SetValue(IUQI_DB[variableKey]);
-			Settings.SetOnValueChangedCallback(uniqueVariable, OnSettingChanged);
+			--Settings.SetOnValueChangedCallback(uniqueVariable, OnSettingChanged);
 
 			return setting;
 		end
@@ -451,130 +484,45 @@ local function OnAddonLoaded()
 			Settings.CreateSlider(category, setting, options, tooltip)
 		end
 
+		-- THEME SETTINGS
 
+		local function CreateThemeSettingDropdown(trackID, trackName)
+			local variable = trackName .. "Theme"
+			local defaultValue = "Default"
+			local name = string.format(L["IconTheme"], L[trackName])
+			local tooltip = string.format(L["IconThemeTT"], L[trackName])
 
-		local CreateDropdown = Settings.CreateDropdown or Settings.CreateDropDown
-		local CreateCheckbox = Settings.CreateCheckbox or Settings.CreateCheckBox
-
-		do
-			local variable = "explorerTheme"
-			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["explorerTheme"]
-			local tooltip = L["explorerThemeTT"]
-
-			local icon = getIcon(categoryDataTab[categoryEnum.Explorer], true, 20)
 			local function GetOptions()
 				local container = Settings.CreateControlTextContainer()
-				container:Add(1, icon..L["Default"])
-				container:Add(2, "OtherAddonStyle1")
-				container:Add(3, "OtherAddonStyle2")
-				container:Add(4, "etc") -- probably need something to dynamically add icons here
+				
+				local themes = {}
+				for key, theme in pairs(categoryIconThemes[trackID]) do
+					table.insert(themes, {key = key, name = theme.name, index = theme.index, icon = theme.icon})
+				end
+
+				-- keep the Default option to the top
+				table.sort(themes, function(a, b)
+					return a.index < b.index
+				end)
+
+				for _, theme in ipairs(themes) do
+					container:Add(theme.key, theme.icon:format(16, 16) .. " " .. theme.name)
+				end
+
 				return container:GetData()
 			end
 
 			local setting = RegisterSetting(variable, defaultValue, name);
+			Settings.SetOnValueChangedCallback("IUQI_" .. variable, RefreshAll);
 			CreateDropdown(category, setting, GetOptions, tooltip)
 		end
 
-		do
-			local variable = "adventurerTheme"
-			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["adventurerTheme"]
-			local tooltip = L["adventurerThemeTT"]
-
-			local icon = getIcon(categoryDataTab[categoryEnum.Adventurer], true, 20)
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-				container:Add(1, icon..L["Default"])
-				container:Add(2, "OtherAddonStyle1")
-				container:Add(3, "OtherAddonStyle2")
-				container:Add(4, "etc")
-				return container:GetData()
-			end
-
-			local setting = RegisterSetting(variable, defaultValue, name);
-			CreateDropdown(category, setting, GetOptions, tooltip)
-		end
-
-		do
-			local variable = "veteranTheme"
-			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["veteranTheme"]
-			local tooltip = L["veteranThemeTT"]
-
-			local icon = getIcon(categoryDataTab[categoryEnum.Veteran], true, 20)
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-				container:Add(1, icon..L["Default"])
-				container:Add(2, "OtherAddonStyle1")
-				container:Add(3, "OtherAddonStyle2")
-				container:Add(4, "etc")
-				return container:GetData()
-			end
-
-			local setting = RegisterSetting(variable, defaultValue, name);
-			CreateDropdown(category, setting, GetOptions, tooltip)
-		end
-
-		do
-			local variable = "championTheme"
-			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["championTheme"]
-			local tooltip = L["championThemeTT"]
-
-			local icon = getIcon(categoryDataTab[categoryEnum.Champion], true, 20)
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-				container:Add(1, icon..L["Default"])
-				container:Add(2, "OtherAddonStyle1")
-				container:Add(3, "OtherAddonStyle2")
-				container:Add(4, "etc")
-				return container:GetData()
-			end
-
-			local setting = RegisterSetting(variable, defaultValue, name);
-			CreateDropdown(category, setting, GetOptions, tooltip)
-		end
-
-		do
-			local variable = "heroTheme"
-			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["heroTheme"]
-			local tooltip = L["heroThemeTT"]
-
-			local icon = getIcon(categoryDataTab[categoryEnum.Hero], true, 20)
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-				container:Add(1, icon..L["Default"])
-				container:Add(2, "OtherAddonStyle1")
-				container:Add(3, "OtherAddonStyle2")
-				container:Add(4, "etc")
-				return container:GetData()
-			end
-
-			local setting = RegisterSetting(variable, defaultValue, name);
-			CreateDropdown(category, setting, GetOptions, tooltip)
-		end
-
-		do
-			local variable = "mythTheme"
-			local defaultValue = 1  -- Corresponds to "Option 1" below.
-			local name = L["mythTheme"]
-			local tooltip = L["mythThemeTT"]
-
-			local icon = getIcon(categoryDataTab[categoryEnum.Myth], true, 20)
-			local function GetOptions()
-				local container = Settings.CreateControlTextContainer()
-				container:Add(1, icon..L["Default"])
-				container:Add(2, "OtherAddonStyle1")
-				container:Add(3, "OtherAddonStyle2")
-				container:Add(4, "etc")
-				return container:GetData()
-			end
-
-			local setting = RegisterSetting(variable, defaultValue, name);
-			CreateDropdown(category, setting, GetOptions, tooltip)
-		end
+		CreateThemeSettingDropdown(categoryEnum.Explorer, "Explorer")
+		CreateThemeSettingDropdown(categoryEnum.Adventurer, "Adventurer")
+		CreateThemeSettingDropdown(categoryEnum.Veteran, "Veteran")
+		CreateThemeSettingDropdown(categoryEnum.Champion, "Champion")
+		CreateThemeSettingDropdown(categoryEnum.Hero, "Hero")
+		CreateThemeSettingDropdown(categoryEnum.Myth, "Myth")
 
 		Settings.RegisterAddOnCategory(category)
 
@@ -585,6 +533,41 @@ end
 
 EventUtil.ContinueOnAddOnLoaded("ItemUpgradeQualityIcons", OnAddonLoaded);
 
+RegisterThemeIcon(categoryEnum.Explorer, "Adventurer", L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Explorer, "Veteran", L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Explorer, "Champion", L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Explorer, "Hero", L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Explorer, "Myth", L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+
+RegisterThemeIcon(categoryEnum.Adventurer, "Explorer", L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Adventurer, "Veteran", L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Adventurer, "Champion", L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Adventurer, "Hero", L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Adventurer, "Myth", L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+
+RegisterThemeIcon(categoryEnum.Veteran, "Explorer", L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Veteran, "Adventurer", L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Veteran, "Champion", L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Veteran, "Hero", L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Veteran, "Myth", L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+
+RegisterThemeIcon(categoryEnum.Champion, "Explorer", L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Champion, "Adventurer", L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Champion, "Veteran", L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Champion, "Hero", L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Champion, "Myth", L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+
+RegisterThemeIcon(categoryEnum.Hero, "Explorer", L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Hero, "Adventurer", L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Hero, "Veteran", L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Hero, "Champion", L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Hero, "Myth", L["Myth"], "|TInterface\\AddOns\\ItemUpgradeQualityIcons\\ProfessionsQualityIcons:%d:%d:0:0:128:128:86:122:42:78|t");
+
+RegisterThemeIcon(categoryEnum.Myth, "Explorer", L["Explorer"], "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Myth, "Adventurer", L["Adventurer"], "|A:Professions-ChatIcon-Quality-Tier2:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Myth, "Veteran", L["Veteran"], "|A:Professions-ChatIcon-Quality-Tier3:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Myth, "Champion", L["Champion"], "|A:Professions-ChatIcon-Quality-Tier4:%d:%d|a");
+RegisterThemeIcon(categoryEnum.Myth, "Hero", L["Hero"], "|A:Professions-ChatIcon-Quality-Tier5:%d:%d|a");
 
 ---------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -608,22 +591,12 @@ IUQI_API = {
 	UpdateBankSlot = UpdateBankSlot,
 	UpdateEquipmentFlyoutFrames = UpdateEquipmentFlyoutFrames,
 
+	-- Function to add new icon options
+	-- Example usage: IUQI_API.RegisterThemeIcon(IUQI_API.categoryEnum.Explorer, "MyThemeKey", "MyThemeName", "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+	-- Theme name can be localized (as it appears on the dropdown) but key is used for identifying current selected theme and SHOULD remain locale-agnostic
+	-- Size MUST be %d in the texture/atlas string for formatting
+	RegisterThemeIcon = RegisterThemeIcon,
+
 	-- Utility for addons to refresh everything
-	RefreshAll = function()
-		-- Refresh inventory
-		for slotIndex = 1, 17 do
-			UpdateInventory(slotIndex);
-		end
-		-- Refresh bags
-		for bagID = 0, 12 do
-			local containerFrame = ContainerFrameUtil_GetShownFrameForID(bagID);
-			if containerFrame then
-				UpdateContainerFrame(containerFrame);
-			end
-		end
-		-- Refresh equipment flyout if shown
-		if EquipmentFlyoutFrame:IsShown() then
-			UpdateEquipmentFlyoutFrames(EquipmentFlyoutFrame);
-		end
-	end,
+	RefreshAll = RefreshAll,
 };
