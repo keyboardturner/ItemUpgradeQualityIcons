@@ -2,7 +2,9 @@
 
 Icons now have slightly more freedom with the new horizontal and vertical offset options on the icons (please use responsibly - addon devs are not responsible for any icons escaping containment and destruction of humanity)
 
-global variable for addon API added under `IUQI_API`
+Global variable for addon API added under `IUQI_API`
+
+Added options to change existing icons as well as API for addons to add their own icon options. 
 
 # 0.3.4
 
