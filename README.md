@@ -12,6 +12,8 @@
 <p>Veteran - Triple Gold Dot&nbsp;<img src="https://wow.zamimg.com/uploads/screenshots/normal/1067033.png" alt="" width="20" height="16" /></p>
 <p>Champion - Quadruple Teal Dot&nbsp;<img src="https://wow.zamimg.com/uploads/screenshots/normal/1067034.png" alt="" width="20" height="21" /></p>
 <p>Hero - Pentagold&nbsp;<img src="https://wow.zamimg.com/uploads/screenshots/normal/1067035.png" alt="" width="20" height="19" /></p>
+<p>Myth - Hexagem &nbsp;<img src="https://i.imgur.com/P9Xuq2h.png" alt=""width="35" height="35" />(made by [Peterodox](https://twitter.com/Peterodox))</p>
+
 <p>&nbsp;</p>
 <h4>BUG REPORTING</h4>
 <p>If you want to report an issue, <span style="text-decoration: underline;">please state the language you're playing in</span> and/or if any particular <span style="text-decoration: underline;">additional addons causing issues</span>.</p>
