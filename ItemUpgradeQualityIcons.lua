@@ -506,7 +506,7 @@ local function OnAddonLoaded()
 				end)
 
 				for _, theme in ipairs(themes) do
-					container:Add(theme.key, theme.icon .. " " .. theme.name)
+					container:Add(theme.key, theme.icon:format(16, 16) .. " " .. theme.name)
 				end
 
 				return container:GetData()
