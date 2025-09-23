@@ -592,7 +592,8 @@ IUQI_API = {
 	UpdateEquipmentFlyoutFrames = UpdateEquipmentFlyoutFrames,
 
 	-- Function to add new icon options
-	-- Example usage: IUQI_API.RegisterThemeIcon(IUQI_API.categoryEnum.Explorer, "MyTheme", "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+	-- Example usage: IUQI_API.RegisterThemeIcon(IUQI_API.categoryEnum.Explorer, "MyThemeKey", "MyThemeName", "|A:Professions-ChatIcon-Quality-Tier1:%d:%d|a");
+	-- Theme name can be localized (as it appears on the dropdown) but key is used for identifying current selected theme and SHOULD remain locale-agnostic
 	-- Size MUST be %d in the texture/atlas string for formatting
 	RegisterThemeIcon = RegisterThemeIcon,
 
