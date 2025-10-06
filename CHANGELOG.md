@@ -1,3 +1,7 @@
+# 0.3.6
+
+11.2.5 toc update
+
 # 0.3.5
 
 Icons now have slightly more freedom with the new horizontal and vertical offset options on the icons (please use responsibly - addon devs are not responsible for any icons escaping containment and destruction of humanity)
