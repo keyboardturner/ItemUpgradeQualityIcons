@@ -26,14 +26,59 @@ local categoryEnum = {
 	Awakened = 1 -- Until reused, no idea what its ID is and no point figuring it out
 };
 
+
+
+
+-- Change itemlevel data depending on current season
+CurrentSeasonNumber = C_SeasonInfo.GetCurrentDisplaySeasonID()
+
+if CurrentSeasonNumber == 30 then -- The War Within season 3
+    CurrentSeasonItemlevels = {642, 655, 668, 681, 694, 707}
+	CurrentSeasonUpgradeTiers = {"Explorer", "Adventurer", "Veteran", "Champion", "Hero", "Myth"}
+	CurrentSeasonColorsDefault = {1, 3, 5, 7, 2, 11}
+elseif CurrentSeasonNumber == 34 then -- Midnight Beta
+    CurrentSeasonItemlevels = {207, 220, 233, 246, 259, 272}
+	CurrentSeasonUpgradeTiers = {"Adventurer", "Veteran", "Champion", "Hero", "Myth"}
+	CurrentSeasonColorsDefault = {3, 5, 7, 2, 11}
+else
+end
+
+
+-- Color table for options menu
+ADM_DefaultColors = {
+{["Tier"] = "Explorer", ["Red"] = 230, ["Green"] = 115, ["Blue"] = 90},
+{["Tier"] = "Adventurer", ["Red"] = 223, ["Green"] = 230, ["Blue"] = 230},
+{["Tier"] = "Veteran", ["Red"] = 240, ["Green"] = 200, ["Blue"] = 63},
+{["Tier"] = "Champion", ["Red"] = 13, ["Green"] = 230, ["Blue"] = 205},
+{["Tier"] = "Hero", ["Red"] = 255, ["Green"] = 128, ["Blue"] = 0},
+{["Tier"] = "Myth", ["Red"] = 230, ["Green"] = 76, ["Blue"] = 230}
+}
+
+
+local function ADM_ConvertColorValuestoString(Red, Green, Blue)
+    local textstring = (tostring(Red)..":"..tostring(Green)..":"..tostring(Blue))
+    return textstring
+end
+
+local function ADM_GenerateTextstringfromColors(input_variable)
+    local string_red = IUQI_DB["ADM_ColorChoice_"..input_variable.."Red"]
+    local string_green = IUQI_DB["ADM_ColorChoice_"..input_variable.."Green"]
+    local string_blue = IUQI_DB["ADM_ColorChoice_"..input_variable.."Blue"]
+
+    local textstring = (tostring(string_red)..":"..tostring(string_green)..":"..tostring(string_blue))
+
+    return textstring
+end
+
+
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 642, color = ITEM_POOR_COLOR},
-	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = 655, color = WHITE_FONT_COLOR},
-	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = 668, color = UNCOMMON_GREEN_COLOR},
-	[categoryEnum.Champion] = {englishName = "Champion", minLevel = 681, color = RARE_BLUE_COLOR},
-	[categoryEnum.Hero] = {englishName = "Hero", minLevel = 694, color = ITEM_EPIC_COLOR},
-	[categoryEnum.Myth] = {englishName = "Myth", minLevel = 707, color = ITEM_LEGENDARY_COLOR},
+	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = CurrentSeasonItemlevels[1], color = ITEM_POOR_COLOR},
+	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = CurrentSeasonItemlevels[2], color = WHITE_FONT_COLOR},
+	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = CurrentSeasonItemlevels[3], color = UNCOMMON_GREEN_COLOR},
+	[categoryEnum.Champion] = {englishName = "Champion", minLevel = CurrentSeasonItemlevels[4], color = RARE_BLUE_COLOR},
+	[categoryEnum.Hero] = {englishName = "Hero", minLevel = CurrentSeasonItemlevels[5], color = ITEM_EPIC_COLOR},
+	[categoryEnum.Myth] = {englishName = "Myth", minLevel = CurrentSeasonItemlevels[6], color = ITEM_LEGENDARY_COLOR},
 	[categoryEnum.Awakened] = {englishName = "Awakened", minLevel = 493, color = ITEM_LEGENDARY_COLOR}, -- update later maybe, for now this is OLD
 }
 
@@ -71,9 +116,45 @@ local categoryIconThemes = {
 	},
 }
 
-local function GetIconForTrack(trackID, size)
+local function GetIconColor_ADM(input_itemlevel_current, size, input_color)
+
+    -- icons
+    local itemlevel_temp_one = 0
+	local itemlevel_temp_two = 0
+    if input_itemlevel_current > 4 then
+	    itemlevel_temp_one = 4
+		itemlevel_temp_two = (input_itemlevel_current - 4)
+	else
+	    itemlevel_temp_one = input_itemlevel_current
+		itemlevel_temp_two = 1
+	end
+
+    local upgradelevel_one = tostring(itemlevel_temp_one)
+    local upgradelevel_two = tostring(itemlevel_temp_two)
+
+    -- other
+    local colorstring = ADM_GenerateTextstringfromColors(input_color)
+    local iconsize = tostring(size)
+	
+	-- create strings
+	local iconstring_one = ("|TInterface\\AddOns\\ItemUpgradeQualityIcons\\Images\\Rank"..upgradelevel_one..".blp:"..iconsize..":"..iconsize..":0:0:"..iconsize..":"..iconsize..":0:"..iconsize..":0:"..iconsize..":"..colorstring.."|t")
+	local iconstring_two = ("|TInterface\\AddOns\\ItemUpgradeQualityIcons\\Images\\Rank"..upgradelevel_two..".blp:"..iconsize..":"..iconsize..":0:0:"..iconsize..":"..iconsize..":0:"..iconsize..":0:"..iconsize..":"..colorstring.."|t")
+
+    if input_itemlevel_current < 5 then
+	iconstring_two = ""
+	end
+    
+	local finalstring = (iconstring_one..iconstring_two)
+	return finalstring
+end
+
+local function GetIconForTrack(trackID, size, upgradelevel_current, currenttiername)
 	local iconTheme = IUQI_DB[categoryDataTab[trackID].englishName .. "Theme"];
 	local iconString = (iconTheme and categoryIconThemes[trackID][iconTheme] or categoryIconThemes[trackID]["Default"]).icon;
+
+    if IUQI_DB.ADM_Enable == true then
+        iconString = GetIconColor_ADM(upgradelevel_current, size, currenttiername)
+	end
 
 	return iconString:format(size, size)
 end
@@ -83,8 +164,10 @@ local function GetIconForLink(itemLink, iconSize)
 
 	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
 	if not itemUpgradeData or not itemUpgradeData.trackStringID then return end
+    local upgradelevel_current = itemUpgradeData.currentLevel
+	local tiername = itemUpgradeData.trackString
 
-	return GetIconForTrack(itemUpgradeData.trackStringID, iconSize);
+	return GetIconForTrack(itemUpgradeData.trackStringID, iconSize, upgradelevel_current, tiername);
 end
 
 -- TOOLTIP ICON
@@ -95,6 +178,9 @@ local function SearchAndReplaceTooltipLine(tooltip)
 
 	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
 	if not itemUpgradeData then return end
+
+    local currentupgradelevel = itemUpgradeData.currentLevel
+	local currenttiername = itemUpgradeData.trackString
 
 	local categoryData = categoryDataTab[itemUpgradeData.trackStringID]
 	if not categoryData then return end -- Invalid/non-existent category
@@ -125,7 +211,7 @@ local function SearchAndReplaceTooltipLine(tooltip)
 				end
 			elseif text:match(patternUpgradeLevel) then
 				-- Ilvl line is always above the upgrade line, so this order works
-				text = text:gsub(patternUpgradeLevel, "%1" .. GetIconForTrack(itemUpgradeData.trackStringID, 20) .. " %2%3")
+				text = text:gsub(patternUpgradeLevel, "%1" .. GetIconForTrack(itemUpgradeData.trackStringID, 20, currentupgradelevel, currenttiername) .. " %2%3")
 
 				line:SetText(text)
 				line:Show()
@@ -384,6 +470,19 @@ local function OnAddonLoaded()
 			IUQI_DB = CopyTable(defaultsTable);
 		end
 
+    -- create default value for ADM_ColorChoice
+    for i1, v1 in ipairs(CurrentSeasonUpgradeTiers) do
+        if IUQI_DB["ADM_ColorChoice_"..v1] == nil then
+	        for i2, v2 in pairs(ADM_DefaultColors) do
+                if v2["Tier"] == v1 then
+                    IUQI_DB["ADM_ColorChoice_"..v1.."Red"] = v2["Red"]
+					IUQI_DB["ADM_ColorChoice_"..v1.."Green"] = v2["Green"]
+					IUQI_DB["ADM_ColorChoice_"..v1.."Blue"] = v2["Blue"]
+                end
+		    end
+	    end
+    end
+
 		---------------------------------------------------------------------------------------------------------------------------------
 		---------------------------------------------------------------------------------------------------------------------------------
 		---------------------------------------------------------------------------------------------------------------------------------
@@ -450,7 +549,7 @@ local function OnAddonLoaded()
 
 			local setting = RegisterSetting(variable, defaultValue, name);
 			local options = Settings.CreateSliderOptions(minValue, maxValue, step)
-			options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
+			options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, FormatPercentage);
 			Settings.CreateSlider(category, setting, options, tooltip)
 		end
 
@@ -483,6 +582,7 @@ local function OnAddonLoaded()
 			options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
 			Settings.CreateSlider(category, setting, options, tooltip)
 		end
+
 
 		-- THEME SETTINGS
 
@@ -523,6 +623,102 @@ local function OnAddonLoaded()
 		CreateThemeSettingDropdown(categoryEnum.Champion, "Champion")
 		CreateThemeSettingDropdown(categoryEnum.Hero, "Hero")
 		CreateThemeSettingDropdown(categoryEnum.Myth, "Myth")
+
+		---------------------------------------------------------------------------------------------------------------------------------
+
+		-- alternative display mode (ADM in short)
+        local function ADM_ShowColorPicker(Original_R, Original_G, Original_B, variablename)
+            local function ADM_OnColorChanged()
+                local New_R, New_G, New_B = ColorPickerFrame:GetColorRGB()
+				local New_A = ColorPickerFrame:GetColorAlpha()
+				local Updated_R = Round(New_R * 255)
+				local Updated_G = Round(New_G * 255)
+				local Updated_B = Round(New_B * 255)
+				IUQI_DB["ADM_ColorChoice_"..variablename.."Red"] = Updated_R
+				IUQI_DB["ADM_ColorChoice_"..variablename.."Green"] = Updated_G
+				IUQI_DB["ADM_ColorChoice_"..variablename.."Blue"] = Updated_B
+            end
+
+            local function ADM_OnOpacityChanged()
+            end
+
+            local function ADM_OnCancel()
+				IUQI_DB["ADM_ColorChoice_"..variablename.."Red"] = Original_R
+				IUQI_DB["ADM_ColorChoice_"..variablename.."Green"] = Original_G
+				IUQI_DB["ADM_ColorChoice_"..variablename.."Blue"] = Original_B
+            end
+
+            local options = {
+                swatchFunc = ADM_OnColorChanged,
+				opacityFunc = ADM_OnOpacityChanged,
+                cancelFunc = ADM_OnCancel,
+                hasOpacity = false,
+				opacity = 100,
+                r = Original_R / 255,
+                g = Original_G / 255,
+                b = Original_B / 255,
+            }
+
+        ColorPickerFrame:SetupColorPickerAndShow(options)
+        end
+
+        local function OnSettingChanged_ADM(setting, value)			
+		    local variablename_temp = setting:GetVariable()
+			local variablename = strsub(variablename_temp, 10)
+
+            for i, v in pairs(ADM_DefaultColors) do
+			    if v["Tier"] == variablename then
+				    if value == 1 then
+					    ADM_ShowColorPicker(IUQI_DB["ADM_ColorChoice_"..variablename.."Red"], IUQI_DB["ADM_ColorChoice_"..variablename.."Green"], IUQI_DB["ADM_ColorChoice_"..variablename.."Blue"], variablename)
+					elseif value == 2 then
+				        IUQI_DB["ADM_ColorChoice_"..variablename.."Red"] = v["Red"]
+						IUQI_DB["ADM_ColorChoice_"..variablename.."Green"] = v["Green"]
+						IUQI_DB["ADM_ColorChoice_"..variablename.."Blue"] = v["Blue"]
+					end
+					
+					if IUQI_DB["ADM_Enable"] == true then
+		                RefreshAll()
+		            end
+				end
+		    end
+			
+			for i, v in pairs(CurrentSeasonUpgradeTiers) do
+			    IUQI_DB["ADM_"..v] = 3
+		    end
+        end
+
+		do
+			local variable = "ADM_Enable"
+			local name = L["ADM_Enable"]
+			local tooltip = L["ADM_EnableTT"]
+			local defaultValue = false
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			CreateCheckbox(category, setting, tooltip)
+		end
+
+		do
+		    for i, v in ipairs(CurrentSeasonUpgradeTiers) do
+				local variable = ("ADM_"..v)
+				local defaultValue = 3
+			    local name = L[v]
+			    local tooltip = ""
+                local colorstring = ADM_GenerateTextstringfromColors(v)
+			    local function GetOptions()
+				    local container = Settings.CreateControlTextContainer()
+				        container:Add(1, COLOR_PICKER)
+						container:Add(2, RESET_TO_DEFAULT)
+						container:Add(3, ("|TInterface\\AddOns\\ItemUpgradeQualityIcons\\Images\\Rank4.blp:20:20:0:0:20:20:0:20:0:20:"..colorstring.."|t"))
+				    return container:GetData()
+			    end
+
+			    local setting = RegisterSetting(variable, defaultValue, name);
+				setting:SetValueChangedCallback(OnSettingChanged_ADM)
+			    CreateDropdown(category, setting, GetOptions, tooltip)
+			end
+		end
+
+		---------------------------------------------------------------------------------------------------------------------------------
 
 		Settings.RegisterAddOnCategory(category)
 
