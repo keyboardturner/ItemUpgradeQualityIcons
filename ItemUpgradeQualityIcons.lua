@@ -475,16 +475,20 @@ local function OnAddonLoaded()
 		end
 
     -- create default value for ADM_ColorChoice
-    for i1, v1 in ipairs(CurrentSeasonUpgradeTiers) do
-        if IUQI_DB["ADM_ColorChoice_"..v1] == nil then
-	        for i2, v2 in pairs(ADM_DefaultColors) do
-                if v2["Tier"] == v1 then
-                    IUQI_DB["ADM_ColorChoice_"..v1.."Red"] = v2["Red"]
+    for i1, v1 in ipairs(CurrentSeasonUpgradeTiers) do	    
+	    for i2, v2 in pairs(ADM_DefaultColors) do
+            if v2["Tier"] == v1 then
+                if IUQI_DB["ADM_ColorChoice_"..v1.."Red"] == nil then
+					IUQI_DB["ADM_ColorChoice_"..v1.."Red"] = v2["Red"]
+			    end
+                if IUQI_DB["ADM_ColorChoice_"..v1.."Green"] == nil then
 					IUQI_DB["ADM_ColorChoice_"..v1.."Green"] = v2["Green"]
+				end
+                if IUQI_DB["ADM_ColorChoice_"..v1.."Blue"] == nil then
 					IUQI_DB["ADM_ColorChoice_"..v1.."Blue"] = v2["Blue"]
-                end
-		    end
-	    end
+				end
+            end
+		end
     end
 
 		---------------------------------------------------------------------------------------------------------------------------------
@@ -586,7 +590,6 @@ local function OnAddonLoaded()
 			options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right);
 			Settings.CreateSlider(category, setting, options, tooltip)
 		end
-
 
 		-- THEME SETTINGS
 
