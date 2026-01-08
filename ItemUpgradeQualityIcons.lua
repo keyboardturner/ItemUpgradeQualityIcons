@@ -29,19 +29,23 @@ local categoryEnum = {
 
 
 
--- Change itemlevel data depending on current season
-CurrentSeasonNumber = C_SeasonInfo.GetCurrentDisplaySeasonID()
+-- This new code snippet will change the itemlevel data depending on current season.
+-- Originally, I wanted to use the seasonID in order to change it automatically.
+-- Unfortunately, the ID data isn't available after the very first log-in, and packaging the entire code into a "PLAYER LOGIN" event seems silly.
+-- Instead, update this data on the first day a new season starts.
 
-if CurrentSeasonNumber == 30 then -- The War Within season 3
-    CurrentSeasonItemlevels = {642, 655, 668, 681, 694, 707}
-	CurrentSeasonUpgradeTiers = {"Explorer", "Adventurer", "Veteran", "Champion", "Hero", "Myth"}
-	CurrentSeasonColorsDefault = {1, 3, 5, 7, 2, 11}
-elseif CurrentSeasonNumber == 34 then -- Midnight Beta
-    CurrentSeasonItemlevels = {207, 220, 233, 246, 259, 272}
-	CurrentSeasonUpgradeTiers = {"Adventurer", "Veteran", "Champion", "Hero", "Myth"}
-	CurrentSeasonColorsDefault = {3, 5, 7, 2, 11}
-else
-end
+CurrentSeasonItemlevels = {642, 655, 668, 681, 694, 707}
+CurrentSeasonUpgradeTiers = {"Explorer", "Adventurer", "Veteran", "Champion", "Hero", "Myth"}
+
+--CurrentSeasonNumber = C_SeasonInfo.GetCurrentDisplaySeasonID()
+
+-- Midnight season 1
+-- CurrentSeasonItemlevels = {207, 220, 233, 246, 259, 272}
+-- CurrentSeasonUpgradeTiers = {"Adventurer", "Veteran", "Champion", "Hero", "Myth"}
+
+
+
+
 
 
 -- Color table for options menu
