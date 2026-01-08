@@ -42,6 +42,8 @@ if LOCALE == "enUS" then
 	L["Awakened"] = "Awakened"
 	L["IconTheme"] = "%s Icon"
 	L["IconThemeTT"] = "Icon that appears on %s items and tooltips."
+	L["ADM_Enable"] = "Alternative Display Mode"
+	L["ADM_EnableTT"] = "Displays an icon for each upgrade level within each upgrade tier."
 
 return end
 
@@ -108,6 +110,8 @@ if LOCALE == "deDE" then
 	L["Awakened"] = "Erweckt"
 	L["IconTheme"] = "%s Symbol"
 	L["IconThemeTT"] = "Symbol, das auf %s-Gegenständen und in Tooltips erscheint."
+	L["ADM_Enable"] = "Alternativer Anzeigemodus"
+	L["ADM_EnableTT"] = "Zeigt ein Symbol je Stufe innerhalb einer Aufwertungskategorie an."
 
 return end
 
