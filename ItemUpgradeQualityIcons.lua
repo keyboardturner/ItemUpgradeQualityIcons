@@ -28,12 +28,12 @@ local categoryEnum = {
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 642, color = ITEM_POOR_COLOR},
-	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = 655, color = WHITE_FONT_COLOR},
-	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = 668, color = UNCOMMON_GREEN_COLOR},
-	[categoryEnum.Champion] = {englishName = "Champion", minLevel = 681, color = RARE_BLUE_COLOR},
-	[categoryEnum.Hero] = {englishName = "Hero", minLevel = 694, color = ITEM_EPIC_COLOR},
-	[categoryEnum.Myth] = {englishName = "Myth", minLevel = 707, color = ITEM_LEGENDARY_COLOR},
+	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 642, color = ITEM_POOR_COLOR}, -- no longer used?
+	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = 220, color = WHITE_FONT_COLOR},
+	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = 233, color = UNCOMMON_GREEN_COLOR},
+	[categoryEnum.Champion] = {englishName = "Champion", minLevel = 246, color = RARE_BLUE_COLOR},
+	[categoryEnum.Hero] = {englishName = "Hero", minLevel = 259, color = ITEM_EPIC_COLOR},
+	[categoryEnum.Myth] = {englishName = "Myth", minLevel = 272, color = ITEM_LEGENDARY_COLOR},
 	[categoryEnum.Awakened] = {englishName = "Awakened", minLevel = 493, color = ITEM_LEGENDARY_COLOR}, -- update later maybe, for now this is OLD
 }
 
