@@ -116,7 +116,7 @@ local function SearchAndReplaceTooltipLine(tooltip)
 					-- Not showing ilvl range on a max upgraded item
 					local itemMaxLevel = itemUpgradeData.maxItemLevel
 
-					if ilvl ~= itemMaxLevel then
+					if ilvl <= itemMaxLevel then -- sometimes itemMaxLevel is 0 (??????????)
 						text = text .. "/" .. itemMaxLevel
 
 						line:SetText(text)
