@@ -112,11 +112,12 @@ local function SearchAndReplaceTooltipLine(tooltip)
 			local ilvl = tonumber(text:match(patternIlvl));
 			if ilvl then
 				-- Checking if the ilvl is in the right range (otherwise it's a previous season item)
-				if ilvl >= categoryData.minLevel then
+				local itemMinLevel = categoryData.minLevel
+				if ilvl >= itemMinLevel then
 					-- Not showing ilvl range on a max upgraded item
 					local itemMaxLevel = itemUpgradeData.maxItemLevel
 
-					if ilvl <= itemMaxLevel then -- sometimes itemMaxLevel is 0 (??????????)
+					if ilvl < itemMaxLevel and itemMaxLevel >= itemMinLevel then -- sometimes itemMaxLevel is 0 (??????????)
 						text = text .. "/" .. itemMaxLevel
 
 						line:SetText(text)
