@@ -302,7 +302,10 @@ local function UpdateEquipmentFlyoutFrames(self)
 		-- Retrieve the link from the bag slot or inventory slot (depending on item location)
 		local itemLocation = iconButton.location
 		if type(itemLocation) == "table" then return end
-		local player, bank, bags, voidStorage, slot, bag, tab, voidSlot = EquipmentManager_UnpackLocation(itemLocation)
+		local locationData = EquipmentManager_GetLocationData(itemLocation)
+		if not locationData then return end
+		local player, bank, bags, slot, bag = locationData.isPlayer, locationData.isBank, locationData.isBags, locationData.slot, locationData.bag
+		
 		local itemLink;
 		if bags then
 			-- Item in player/bank bags (must be first as player or bank will also be true)
