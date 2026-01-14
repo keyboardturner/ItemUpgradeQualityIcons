@@ -28,12 +28,12 @@ local categoryEnum = {
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 642, color = ITEM_POOR_COLOR}, -- no longer used?
-	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = 220, color = WHITE_FONT_COLOR},
-	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = 233, color = UNCOMMON_GREEN_COLOR},
-	[categoryEnum.Champion] = {englishName = "Champion", minLevel = 246, color = RARE_BLUE_COLOR},
-	[categoryEnum.Hero] = {englishName = "Hero", minLevel = 259, color = ITEM_EPIC_COLOR},
-	[categoryEnum.Myth] = {englishName = "Myth", minLevel = 272, color = ITEM_LEGENDARY_COLOR},
+	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 98, color = ITEM_POOR_COLOR}, -- no longer used?
+	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = 102, color = WHITE_FONT_COLOR},
+	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = 108, color = UNCOMMON_GREEN_COLOR},
+	[categoryEnum.Champion] = {englishName = "Champion", minLevel = 121, color = RARE_BLUE_COLOR},
+	[categoryEnum.Hero] = {englishName = "Hero", minLevel = 134, color = ITEM_EPIC_COLOR},
+	[categoryEnum.Myth] = {englishName = "Myth", minLevel = 147, color = ITEM_LEGENDARY_COLOR},
 	[categoryEnum.Awakened] = {englishName = "Awakened", minLevel = 493, color = ITEM_LEGENDARY_COLOR}, -- update later maybe, for now this is OLD
 }
 
@@ -117,7 +117,7 @@ local function SearchAndReplaceTooltipLine(tooltip)
 					-- Not showing ilvl range on a max upgraded item
 					local itemMaxLevel = itemUpgradeData.maxItemLevel
 
-					if ilvl < itemMaxLevel and itemMaxLevel >= itemMinLevel then -- sometimes itemMaxLevel is 0 (??????????)
+					if ilvl < itemMaxLevel and itemMaxLevel > itemMinLevel then -- sometimes itemMaxLevel is 0 (??????????)
 						text = text .. "/" .. itemMaxLevel
 
 						line:SetText(text)
