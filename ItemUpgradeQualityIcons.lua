@@ -56,7 +56,7 @@ local SeasonData = {
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 642, color = ITEM_POOR_COLOR},
+	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 207, color = ITEM_POOR_COLOR},
 	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = 220, color = WHITE_FONT_COLOR},
 	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = 233, color = UNCOMMON_GREEN_COLOR},
 	[categoryEnum.Champion] = {englishName = "Champion", minLevel = 246, color = RARE_BLUE_COLOR},
@@ -154,11 +154,12 @@ local function SearchAndReplaceTooltipLine(tooltip)
 			local ilvl = tonumber(text:match(patternIlvl));
 			if ilvl then
 				-- Checking if the ilvl is in the right range (otherwise it's a previous season item)
-				if ilvl >= categoryData.minLevel then
+				local itemMinLevel = categoryData.minLevel
+				if ilvl >= itemMinLevel then
 					-- Not showing ilvl range on a max upgraded item
 					local itemMaxLevel = itemUpgradeData.maxItemLevel
 
-					if ilvl <= itemMaxLevel then -- sometimes itemMaxLevel is 0 (??????????)
+					if ilvl < itemMaxLevel and itemMaxLevel > itemMinLevel then -- sometimes itemMaxLevel is 0 (??????????)
 						text = text .. "/" .. itemMaxLevel
 
 						line:SetText(text)
