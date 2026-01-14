@@ -26,16 +26,60 @@ local categoryEnum = {
 	Awakened = 1 -- Until reused, no idea what its ID is and no point figuring it out
 };
 
+-- C_SeasonInfo.GetCurrentDisplaySeasonID()
+local SeasonData = {
+	--[30] = { -- TWW s3 (pre-prepatch)
+	--	[categoryEnum.Explorer] = 642,
+	--	[categoryEnum.Adventurer] = 655,
+	--	[categoryEnum.Veteran] = 668,
+	--	[categoryEnum.Champion] = 681,
+	--	[categoryEnum.Hero] = 694,
+	--	[categoryEnum.Myth] = 707,
+	--},
+	[30] = { -- TWW s3 prepatch 98, 102, 108, 121, 134, 147
+		[categoryEnum.Explorer] = 98,
+		[categoryEnum.Adventurer] = 102,
+		[categoryEnum.Veteran] = 108,
+		[categoryEnum.Champion] = 121,
+		[categoryEnum.Hero] = 134,
+		[categoryEnum.Myth] = 147,
+	},
+	[34] = { -- Midnight s1
+		[categoryEnum.Explorer] = 207, -- no longer used?
+		[categoryEnum.Adventurer] = 220,
+		[categoryEnum.Veteran] = 233,
+		[categoryEnum.Champion] = 246,
+		[categoryEnum.Hero] = 259,
+		[categoryEnum.Myth] = 272,
+	},
+};
+
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 642, color = ITEM_POOR_COLOR}, -- no longer used?
+	[categoryEnum.Explorer] = {englishName = "Explorer", minLevel = 642, color = ITEM_POOR_COLOR},
 	[categoryEnum.Adventurer] = {englishName = "Adventurer", minLevel = 220, color = WHITE_FONT_COLOR},
 	[categoryEnum.Veteran] = {englishName = "Veteran", minLevel = 233, color = UNCOMMON_GREEN_COLOR},
 	[categoryEnum.Champion] = {englishName = "Champion", minLevel = 246, color = RARE_BLUE_COLOR},
 	[categoryEnum.Hero] = {englishName = "Hero", minLevel = 259, color = ITEM_EPIC_COLOR},
 	[categoryEnum.Myth] = {englishName = "Myth", minLevel = 272, color = ITEM_LEGENDARY_COLOR},
 	[categoryEnum.Awakened] = {englishName = "Awakened", minLevel = 493, color = ITEM_LEGENDARY_COLOR}, -- update later maybe, for now this is OLD
-}
+};
+
+local function UpdateSeasonData()
+	local currentSeasonID = C_SeasonInfo.GetCurrentDisplaySeasonID()
+	print("currentSeasonID", currentSeasonID)
+
+	if currentSeasonID and SeasonData[currentSeasonID] then
+		local currentSeasonData = SeasonData[currentSeasonID]
+
+		for trackID, minLevel in pairs(currentSeasonData) do
+			if categoryDataTab[trackID] then
+				categoryDataTab[trackID].minLevel = minLevel
+				print("minLevel",minLevel)
+			end
+		end
+	end
+end
 
 local categoryThemesCount = {
 	[categoryEnum.Explorer] = 1,
@@ -45,7 +89,7 @@ local categoryThemesCount = {
 	[categoryEnum.Hero] = 1,
 	[categoryEnum.Myth] = 1,
 	[categoryEnum.Awakened] = 1,
-}
+};
 
 local categoryIconThemes = {
 	[categoryEnum.Explorer] = {
@@ -69,7 +113,7 @@ local categoryIconThemes = {
 	[categoryEnum.Awakened] = {
 		["Default"] = {index = 1, name = L["Default"], icon = "|A:ui-ej-icon-empoweredraid-large:%d:%d|a"}
 	},
-}
+};
 
 local function GetIconForTrack(trackID, size)
 	local iconTheme = IUQI_DB[categoryDataTab[trackID].englishName .. "Theme"];
@@ -282,6 +326,8 @@ end
 
 -- Updates all slots on login/reload
 EventRegistry:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, slotIndex, isEmpty)
+	UpdateSeasonData()
+
 	for slotIndex = 1, 17 do
 		UpdateInventory(slotIndex)
 	end
