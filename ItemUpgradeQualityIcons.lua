@@ -67,7 +67,6 @@ local categoryDataTab = {
 
 local function UpdateSeasonData()
 	local currentSeasonID = C_SeasonInfo.GetCurrentDisplaySeasonID()
-	print("currentSeasonID", currentSeasonID)
 
 	if currentSeasonID and SeasonData[currentSeasonID] then
 		local currentSeasonData = SeasonData[currentSeasonID]
@@ -75,7 +74,6 @@ local function UpdateSeasonData()
 		for trackID, minLevel in pairs(currentSeasonData) do
 			if categoryDataTab[trackID] then
 				categoryDataTab[trackID].minLevel = minLevel
-				print("minLevel",minLevel)
 			end
 		end
 	end
