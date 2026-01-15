@@ -23,7 +23,7 @@ local categoryEnum = {
 	Champion = 973,
 	Hero = 974,
 	Myth = 978, -- 10.1.5
-	Awakened = 1 -- Until reused, no idea what its ID is and no point figuring it out
+	Awakened = 998,
 };
 
 -- Item category data
