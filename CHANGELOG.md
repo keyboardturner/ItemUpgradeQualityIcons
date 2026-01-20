@@ -2,6 +2,8 @@
 
 12.0.0 toc update
 
+Added prevention in case of max upgrade ilvl being 0 or below the minimum ilvl from showing up in the tooltip
+
 # 0.3.7
 
 11.2.7 toc update
