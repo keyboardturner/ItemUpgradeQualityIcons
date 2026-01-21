@@ -7,6 +7,11 @@ patternUpgradeLevel = patternUpgradeLevel:gsub("%%s", ")(.*)(")
 patternUpgradeLevel = patternUpgradeLevel:gsub("%%d", "[0-9]+")
 patternUpgradeLevel = "(" .. patternUpgradeLevel .. ")"
 
+local SQUISH_CURVE_ID = 92181;
+local function GetPostSquishItemLevel(preSquishItemLevel)
+  return C_CurveUtil.EvaluateGameCurve(SQUISH_CURVE_ID, preSquishItemLevel);
+end
+
 local patternIlvl = ITEM_LEVEL
 
 -- Apostr-off (because the french are weird)
@@ -115,7 +120,7 @@ local function SearchAndReplaceTooltipLine(tooltip)
 				local itemMinLevel = categoryData.minLevel
 				if ilvl >= itemMinLevel then
 					-- Not showing ilvl range on a max upgraded item
-					local itemMaxLevel = itemUpgradeData.maxItemLevel
+					local itemMaxLevel = GetPostSquishItemLevel(itemUpgradeData.maxItemLevel)
 
 					if ilvl < itemMaxLevel and itemMaxLevel > itemMinLevel then -- sometimes itemMaxLevel is 0 (??????????)
 						text = text .. "/" .. itemMaxLevel
