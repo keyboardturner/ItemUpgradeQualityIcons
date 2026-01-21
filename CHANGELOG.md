@@ -1,3 +1,9 @@
+# 0.3.9
+
+Potential fix to pre-ilvl squished numbers displaying as max ilvl
+
+Added season data for prepatch and Midnight to allow a (hopefully) smooth transition between seasons.
+
 # 0.3.8
 
 12.0.0 toc update
