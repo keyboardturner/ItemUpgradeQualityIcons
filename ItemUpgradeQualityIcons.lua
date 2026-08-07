@@ -58,16 +58,24 @@ local SeasonData = {
 		[categoryEnum.Hero] = 259,
 		[categoryEnum.Myth] = 272,
 	},
+	[37] = { -- Midnight s2
+		[categoryEnum.Explorer] = 253, -- no longer used?
+		[categoryEnum.Adventurer] = 266,
+		[categoryEnum.Veteran] = 279,
+		[categoryEnum.Champion] = 292,
+		[categoryEnum.Hero] = 305,
+		[categoryEnum.Myth] = 318,
+	},
 };
 
 -- Item category data
 local categoryDataTab = {
-	[categoryEnum.Explorer] = {		englishName = "Explorer",		minLevel = 207, maxLevel = 224,	color = ITEM_POOR_COLOR},
-	[categoryEnum.Adventurer] = {	englishName = "Adventurer",		minLevel = 220, maxLevel = 237,	color = WHITE_FONT_COLOR},
-	[categoryEnum.Veteran] = {		englishName = "Veteran",		minLevel = 233, maxLevel = 250,	color = UNCOMMON_GREEN_COLOR},
-	[categoryEnum.Champion] = {		englishName = "Champion",		minLevel = 246, maxLevel = 263,	color = RARE_BLUE_COLOR},
-	[categoryEnum.Hero] = {			englishName = "Hero",			minLevel = 259, maxLevel = 276,	color = ITEM_EPIC_COLOR},
-	[categoryEnum.Myth] = {			englishName = "Myth",			minLevel = 272, maxLevel = 289,	color = ITEM_LEGENDARY_COLOR},
+	[categoryEnum.Explorer] = {		englishName = "Explorer",		minLevel = 253, maxLevel = 269,	color = ITEM_POOR_COLOR},
+	[categoryEnum.Adventurer] = {	englishName = "Adventurer",		minLevel = 266, maxLevel = 282,	color = WHITE_FONT_COLOR},
+	[categoryEnum.Veteran] = {		englishName = "Veteran",		minLevel = 279, maxLevel = 295,	color = UNCOMMON_GREEN_COLOR},
+	[categoryEnum.Champion] = {		englishName = "Champion",		minLevel = 292, maxLevel = 308,	color = RARE_BLUE_COLOR},
+	[categoryEnum.Hero] = {			englishName = "Hero",			minLevel = 305, maxLevel = 321,	color = ITEM_EPIC_COLOR},
+	[categoryEnum.Myth] = {			englishName = "Myth",			minLevel = 318, maxLevel = 334,	color = ITEM_LEGENDARY_COLOR},
 	[categoryEnum.Awakened] = {		englishName = "Awakened",		minLevel = 493,					color = ITEM_LEGENDARY_COLOR}, -- update later maybe, for now this is OLD
 };
 
