@@ -1,3 +1,7 @@
+# 0.4.6
+
+12.1.0 item level season updates
+
 # 0.4.5
 
 12.0.7 toc update
