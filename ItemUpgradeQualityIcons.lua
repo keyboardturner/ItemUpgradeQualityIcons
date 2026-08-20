@@ -135,10 +135,20 @@ local function GetIconForTrack(trackID, size)
 end
 
 local function GetIconForLink(itemLink, iconSize)
-	if not itemLink then return end
+	if not itemLink then return; end
 
-	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink)
-	if not itemUpgradeData or not itemUpgradeData.trackStringID then return end
+	local itemUpgradeData = C_Item.GetItemUpgradeInfo(itemLink);
+	if not itemUpgradeData or not itemUpgradeData.trackStringID then return; end
+
+	if IUQI_DB and IUQI_DB.hideOutOfSeasonIcons then
+		local categoryData = categoryDataTab[itemUpgradeData.trackStringID];
+		if categoryData and categoryData.minLevel then
+			local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink);
+			if itemLevel and itemLevel < categoryData.minLevel then
+				return nil;
+			end
+		end
+	end
 
 	return GetIconForTrack(itemUpgradeData.trackStringID, iconSize);
 end
@@ -157,6 +167,10 @@ local function SearchAndReplaceTooltipLine(tooltip)
 
 	local categoryData = categoryDataTab[itemUpgradeData.trackStringID]
 	if not categoryData then return end -- Invalid/non-existent category
+
+	-- check if out of date
+	local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink);
+	local isOutOfSeason = itemLevel and (itemLevel < categoryData.minLevel);
 
 	-- Editing the ilvl line
 	for i = 1, #tooltipData.lines do
@@ -182,6 +196,10 @@ local function SearchAndReplaceTooltipLine(tooltip)
 					end
 				end
 			elseif text:match(patternUpgradeLevel) then
+				if IUQI_DB and IUQI_DB.hideOutOfSeasonIcons and isOutOfSeason then
+					break;
+				end
+
 				-- Ilvl line is always above the upgrade line, so this order works
 				local iconStr = GetIconForTrack(itemUpgradeData.trackStringID, 20)
 				
@@ -419,6 +437,7 @@ local defaultsTable = {
 	iconOffsetX = 1,
 	iconOffsetY = 1,
 	hideUpgradeWord = false,
+	hideOutOfSeasonIcons = true,
 };
 
 local function RegisterThemeIcon(trackID, themeKey, themeName, trackIcon)
@@ -562,6 +581,17 @@ local function OnAddonLoaded()
 
 			local setting = RegisterSetting(variable, defaultValue, name);
 			CreateCheckbox(category, setting, tooltip)
+		end
+
+		do
+			local variable = "hideOutOfSeasonIcons";
+			local name = L["HideOutdatedIcons"];
+			local tooltip = L["HideOutdatedIconsTT"];
+			local defaultValue = defaultsTable[variable];
+
+			local setting = RegisterSetting(variable, defaultValue, name);
+			Settings.SetOnValueChangedCallback("IUQI_" .. variable, RefreshAll);
+			CreateCheckbox(category, setting, tooltip);
 		end
 
 		-- THEME SETTINGS

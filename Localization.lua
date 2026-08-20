@@ -44,6 +44,8 @@ if LOCALE == "enUS" then
 	L["IconThemeTT"] = "Icon that appears on %s items and tooltips."
 	L["HideUpgradePrefix"] = "Hide \"Upgrade Level:\" Text"
 	L["HideUpgradePrefixTT"] = "Hides the \"Upgrade Level:\" text in item tooltips."
+	L["HideOutdatedIcons"] = "Hide Outdated Icons"
+	L["HideOutdatedIconsTT"] = "Hides upgrade quality icons below the current season's minimum item level."
 
 return end
 
@@ -79,6 +81,8 @@ if LOCALE == "esES" or LOCALE == "esMX" then
 	L["IconThemeTT"] = "Icono que aparece en los objetos %s y en las descripciones emergentes."
 	L["HideUpgradePrefix"] = "Ocultar texto \"Nivel de mejora:\""
 	L["HideUpgradePrefixTT"] = "Oculta el texto \"Nivel de mejora:\" en las descripciones emergentes de objetos."
+	L["HideOutdatedIcons"] = "Ocultar iconos obsoletos"
+	L["HideOutdatedIconsTT"] = "Oculta los iconos de calidad de mejora por debajo del nivel de objeto mínimo de la temporada actual."
 
 return end
 
@@ -114,6 +118,8 @@ if LOCALE == "deDE" then
 	L["IconThemeTT"] = "Symbol, das auf %s-Gegenständen und in Tooltips erscheint."
 	L["HideUpgradePrefix"] = "\"Aufwertungsstufe:\"-Text ausblenden"
 	L["HideUpgradePrefixTT"] = "Blendet den Text \"Aufwertungsstufe:\" in Gegenstandstooltips aus."
+	L["HideOutdatedIcons"] = "Veraltete Symbole ausblenden"
+	L["HideOutdatedIconsTT"] = "Blendet Symbole für Aufwertungsqualität unterhalb der Mindestgegenstandsstufe der aktuellen Saison aus."
 
 return end
 
@@ -149,6 +155,8 @@ if LOCALE == "frFR" then
 	L["IconThemeTT"] = "Icône qui apparaît sur les objets %s et dans les info-bulles."
 	L["HideUpgradePrefix"] = "Masquer le texte « Niveau d’amélioration : »"
 	L["HideUpgradePrefixTT"] = "Masque le texte « Niveau d’amélioration : » dans les info-bulles des objets."
+	L["HideOutdatedIcons"] = "Masquer les icônes obsolètes"
+	L["HideOutdatedIconsTT"] = "Masque les icônes de qualité d’amélioration inférieures au niveau d’objet minimum de la saison actuelle."
 
 return end
 
@@ -183,6 +191,8 @@ if LOCALE == "itIT" then
 	L["IconTheme"] = "%s Icona"
 	L["HideUpgradePrefix"] = "Nascondi testo \"Livello di potenziamento:\""
 	L["HideUpgradePrefixTT"] = "Nasconde il testo \"Livello di potenziamento:\" nei tooltip degli oggetti."
+	L["HideOutdatedIcons"] = "Nascondi icone obsolete"
+	L["HideOutdatedIconsTT"] = "Nasconde le icone della qualità dei potenziamenti inferiori al livello oggetto minimo della stagione attuale."
 
 return end
 
@@ -218,6 +228,8 @@ if LOCALE == "ptBR" then
 	L["IconThemeTT"] = "Ícone que aparece nos itens %s e nas dicas de interface."
 	L["HideUpgradePrefix"] = "Ocultar texto \"Nível de aprimoramento:\""
 	L["HideUpgradePrefixTT"] = "Oculta o texto \"Nível de aprimoramento:\" nas dicas de itens."
+	L["HideOutdatedIcons"] = "Ocultar ícones desatualizados"
+	L["HideOutdatedIconsTT"] = "Oculta os ícones de qualidade de melhoria abaixo do nível mínimo de item da temporada atual."
 
 -- Note that the EU Portuguese WoW client also
 -- uses the Brazilian Portuguese locale code.
@@ -255,6 +267,8 @@ if LOCALE == "ruRU" then
 	L["IconThemeTT"] = "Значок, который отображается на предметах %s и во всплывающих подсказках."
 	L["HideUpgradePrefix"] = "Скрыть текст \"Уровень улучшения:\""
 	L["HideUpgradePrefixTT"] = "Скрывает текст \"Уровень улучшения:\" в подсказках предметов."
+	L["HideOutdatedIcons"] = "Скрывать устаревшие значки"
+	L["HideOutdatedIconsTT"] = "Скрывает значки качества улучшений ниже минимального уровня предметов текущего сезона."
 
 return end
 
@@ -290,6 +304,8 @@ if LOCALE == "koKR" then
 	L["IconThemeTT"] = "%s 아이템과 툴팁에 표시되는 아이콘입니다."
 	L["HideUpgradePrefix"] = "\"업그레이드 레벨:\" 텍스트 숨기기"
 	L["HideUpgradePrefixTT"] = "아이템 툴팁에서 \"업그레이드 레벨:\" 텍스트를 숨깁니다."
+	L["HideOutdatedIcons"] = "오래된 아이콘 숨기기"
+	L["HideOutdatedIconsTT"] = "현재 시즌의 최소 아이템 레벨보다 낮은 강화 품질 아이콘을 숨깁니다."
 
 return end
 
@@ -325,6 +341,8 @@ if LOCALE == "zhCN" then
 	L["IconThemeTT"] = "显示在 %s 物品和提示中的图标。"
 	L["HideUpgradePrefix"] = "隐藏“升级等级：”文本"
 	L["HideUpgradePrefixTT"] = "在物品提示中隐藏“升级等级：”文本。"
+	L["HideOutdatedIcons"] = "隐藏过时图标"
+	L["HideOutdatedIconsTT"] = "隐藏低于当前赛季最低物品等级的升级品质图标。"
 
 return end
 
@@ -360,5 +378,7 @@ if LOCALE == "zhTW" then
 	L["IconThemeTT"] = "顯示在 %s 物品和提示中的圖示。"
 	L["HideUpgradePrefix"] = "隱藏「升級等級：」文字"
 	L["HideUpgradePrefixTT"] = "在物品提示中隱藏「升級等級：」文字。"
+	L["HideOutdatedIcons"] = "隱藏過時圖示"
+	L["HideOutdatedIconsTT"] = "隱藏低於目前賽季最低物品等級的升級品質圖示。"
 
 return end
