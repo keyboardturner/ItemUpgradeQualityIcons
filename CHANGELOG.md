@@ -1,3 +1,7 @@
+# 0.4.8
+
+12.1.5 toc update
+
 # 0.4.7
 
 Added option (on by default) to hide out-of-season icons on gear to make it less confusing with current season gear
